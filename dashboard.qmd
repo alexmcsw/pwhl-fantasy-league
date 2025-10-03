@@ -1,0 +1,89 @@
+---
+title: "PWHL Fantasy League"
+author: "Noah Bolohan"
+format: dashboard
+---
+
+```{r}
+library(fastRhockey)
+library(tidyverse)
+library(readr)
+library(gt)
+
+invisible(
+    lapply(
+        list.files(
+            "./R",
+            full.names = TRUE
+        ),
+        source
+    )
+)
+
+
+season <- 2025
+
+all_teams <- team_stats(season)
+
+teams_idx <- get_google_sheet(
+    sheetId = 0
+)
+
+team_rosters <- apply(
+    teams_idx,
+    2,
+    filter_for_roster_idx
+)
+
+names(team_rosters) <- names(teams_idx)
+
+standings <- compute_standings()
+```
+# Team Rosters
+
+## Row {.tabset}
+
+```{r}
+#| title: Team 1
+team_rosters$team_1 |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
+```
+
+```{r}
+#| title: Team 2
+team_rosters$team_2 |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
+```
+
+```{r}
+#| title: Team 3
+team_rosters$team_3 |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
+```
+
+# Team Standings
+
+```{r}
+standings |> gt()
+```
