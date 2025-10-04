@@ -14,6 +14,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install libcurl4-openssl-dev libnode-dev libx11-dev pandoc
+
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
