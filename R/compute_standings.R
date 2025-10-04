@@ -1,4 +1,6 @@
-compute_standings <- function() {
+compute_standings <- function(
+    team_rosters
+) {
     standings <- data.frame(
         team_names=names(team_rosters)
     )

@@ -12,7 +12,8 @@ filter_for_roster_idx <- function(
             home_town,
             team.x,
             position.y,
-            points
+            points,
+            player_id
         )
     )
 }

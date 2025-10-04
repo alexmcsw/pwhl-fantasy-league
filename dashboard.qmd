@@ -19,8 +19,9 @@ invisible(
         source
     )
 )
+```
 
-
+```{r}
 season <- 2025
 
 all_teams <- team_stats(season)
@@ -37,7 +38,15 @@ team_rosters <- apply(
 
 names(team_rosters) <- names(teams_idx)
 
-standings <- compute_standings()
+standings <- compute_standings(
+    team_rosters
+)
+
+roster_points_per_game <- roster_points_per_game(
+    team_rosters,
+    season
+)
+
 ```
 # Team Rosters
 
@@ -84,6 +93,14 @@ team_rosters$team_3 |> gt() |> text_transform(
 
 # Team Standings
 
+## Row {height=30%}
+
 ```{r}
 standings |> gt()
+```
+
+## Row {height=70%}
+
+```{r}
+plot(roster_points_per_game$team_1)
 ```
