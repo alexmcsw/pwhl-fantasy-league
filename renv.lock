@@ -69,7 +69,7 @@
       "Config/testthat/edition": "3",
       "Author": "Andri Signorell [aut, cre] (<https://orcid.org/0000-0003-4311-1969>), Ken Aho [ctb], Andreas Alfons [ctb], Nanina Anderegg [ctb], Tomas Aragon [ctb], Chandima Arachchige [ctb], Antti Arppe [ctb], Adrian Baddeley [ctb], Kamil Barton [ctb], Ben Bolker [ctb], Hans W. Borchers [ctb], Frederico Caeiro [ctb], Stephane Champely [ctb], Daniel Chessel [ctb], Leanne Chhay [ctb], Nicholas Cooper [ctb], Clint Cummins [ctb], Michael Dewey [ctb], Harold C. Doran [ctb], Stephane Dray [ctb], Charles Dupont [ctb], Dirk Eddelbuettel [ctb], Claus Ekstrom [ctb], Martin Elff [ctb], Jeff Enos [ctb], Richard W. Farebrother [ctb], John Fox [ctb], Romain Francois [ctb], Michael Friendly [ctb], Tal Galili [ctb], Matthias Gamer [ctb], Joseph L. Gastwirth [ctb], Vilmantas Gegzna [ctb], Yulia R. Gel [ctb], Sereina Graber [ctb], Juergen Gross [ctb], Gabor Grothendieck [ctb], Frank E. Harrell Jr [ctb], Richard Heiberger [ctb], Michael Hoehle [ctb], Christian W. Hoffmann [ctb], Soeren Hojsgaard [ctb], Torsten Hothorn [ctb], Markus Huerzeler [ctb], Wallace W. Hui [ctb], Pete Hurd [ctb], Rob J. Hyndman [ctb], Christopher Jackson [ctb], Matthias Kohl [ctb], Mikko Korpela [ctb], Max Kuhn [ctb], Detlew Labes [ctb], Friederich Leisch [ctb], Jim Lemon [ctb], Dong Li [ctb], Martin Maechler [ctb], Arni Magnusson [ctb], Ben Mainwaring [ctb], Daniel Malter [ctb], George Marsaglia [ctb], John Marsaglia [ctb], Alina Matei [ctb], David Meyer [ctb], Weiwen Miao [ctb], Giovanni Millo [ctb], Yongyi Min [ctb], David Mitchell [ctb], Cyril Flurin Moser [ctb], Franziska Mueller [ctb], Markus Naepflin [ctb], Danielle Navarro [ctb], Henric Nilsson [ctb], Klaus Nordhausen [ctb], Derek Ogle [ctb], Hong Ooi [ctb], Nick Parsons [ctb], Sandrine Pavoine [ctb], Tony Plate [ctb], Luke Prendergast [ctb], Roland Rapold [ctb], William Revelle [ctb], Tyler Rinker [ctb], Brian D. Ripley [ctb], Caroline Rodriguez [ctb], Nathan Russell [ctb], Nick Sabbe [ctb], Ralph Scherer [ctb], Venkatraman E. Seshan [ctb], Michael Smithson [ctb], Greg Snow [ctb], Karline Soetaert [ctb], Werner A. Stahel [ctb], Alec Stephenson [ctb], Mark Stevenson [ctb], Ralf Stubner [ctb], Matthias Templ [ctb], Duncan Temple Lang [ctb], Terry Therneau [ctb], Yves Tille [ctb], Luis Torgo [ctb], Adrian Trapletti [ctb], Joshua Ulrich [ctb], Kevin Ushey [ctb], Jeremy VanDerWal [ctb], Bill Venables [ctb], John Verzani [ctb], Pablo J. Villacorta Iglesias [ctb], Gregory R. Warnes [ctb], Stefan Wellek [ctb], Hadley Wickham [ctb], Rand R. Wilcox [ctb], Peter Wolf [ctb], Daniel Wollschlaeger [ctb], Joseph Wood [ctb], Ying Wu [ctb], Thomas Yee [ctb], Achim Zeileis [ctb]",
       "Maintainer": "Andri Signorell <andri@signorell.net>",
-      "Repository": "CRAN"
+      "Repository": "RSPM"
     },
     "Exact": {
       "Package": "Exact",
@@ -96,7 +96,7 @@
       ],
       "Additional_repositories": "https://pcalhoun1.github.io/drat",
       "NeedsCompilation": "no",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "MASS": {
@@ -252,42 +252,13 @@
       "Maintainer": "Dirk Eddelbuettel <edd@debian.org>",
       "Repository": "CRAN"
     },
-    "RcppParallel": {
-      "Package": "RcppParallel",
-      "Version": "5.1.11-1",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Parallel Programming Tools for 'Rcpp'",
-      "Authors@R": "c( person(\"JJ\", \"Allaire\", role = c(\"aut\"), email = \"jj@rstudio.com\"), person(\"Romain\", \"Francois\", role = c(\"aut\", \"cph\")), person(\"Kevin\", \"Ushey\", role = c(\"aut\", \"cre\"), email = \"kevin@rstudio.com\"), person(\"Gregory\", \"Vandenbrouck\", role = \"aut\"), person(\"Marcus\", \"Geelnard\", role = c(\"aut\", \"cph\"), comment = \"TinyThread library, https://tinythreadpp.bitsnbites.eu/\"), person(\"Hamada S.\", \"Badr\", email = \"badr@jhu.edu\", role = c(\"ctb\"), comment = c(ORCID = \"0000-0002-9808-2344\")), person(family = \"Posit, PBC\", role = \"cph\"), person(family = \"Intel\", role = c(\"aut\", \"cph\"), comment = \"Intel TBB library, https://www.threadingbuildingblocks.org/\"), person(family = \"Microsoft\", role = \"cph\") )",
-      "Description": "High level functions for parallel programming with 'Rcpp'. For example, the 'parallelFor()' function can be used to convert the work of a standard serial \"for\" loop into a parallel one and the 'parallelReduce()' function can be used for accumulating aggregate or other values.",
-      "Depends": [
-        "R (>= 3.0.2)"
-      ],
-      "Suggests": [
-        "Rcpp",
-        "RUnit",
-        "knitr",
-        "rmarkdown"
-      ],
-      "SystemRequirements": "GNU make, Intel TBB, Windows: cmd.exe and cscript.exe, Solaris: g++ is required",
-      "License": "GPL (>= 3)",
-      "URL": "https://rcppcore.github.io/RcppParallel/, https://github.com/RcppCore/RcppParallel",
-      "BugReports": "https://github.com/RcppCore/RcppParallel/issues",
-      "Biarch": "TRUE",
-      "RoxygenNote": "7.1.1",
-      "Encoding": "UTF-8",
-      "NeedsCompilation": "yes",
-      "Author": "JJ Allaire [aut], Romain Francois [aut, cph], Kevin Ushey [aut, cre], Gregory Vandenbrouck [aut], Marcus Geelnard [aut, cph] (TinyThread library, https://tinythreadpp.bitsnbites.eu/), Hamada S. Badr [ctb] (ORCID: <https://orcid.org/0000-0002-9808-2344>), Posit, PBC [cph], Intel [aut, cph] (Intel TBB library, https://www.threadingbuildingblocks.org/), Microsoft [cph]",
-      "Maintainer": "Kevin Ushey <kevin@rstudio.com>",
-      "Repository": "CRAN"
-    },
     "V8": {
       "Package": "V8",
-      "Version": "7.0.0",
+      "Version": "8.0.0",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Embedded JavaScript and WebAssembly Engine for R",
-      "Authors@R": "c( person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\", comment = c(ORCID = \"0000-0002-4035-0289\")), person(\"Jan Marvin\", \"Garbuszus\", role = \"ctb\"))",
+      "Authors@R": "c( person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\", comment = c(ORCID = \"0000-0002-4035-0289\")), person(\"George\", \"Stagg\", role = \"ctb\", comment = c(ORCID = \"0009-0006-3173-9846\")), person(\"Jan Marvin\", \"Garbuszus\", role = \"ctb\"))",
       "Description": "An R interface to V8 <https://v8.dev>: Google's open source JavaScript and WebAssembly engine. This package can be compiled either with V8 version 6  and up or NodeJS when built as a shared library.",
       "License": "MIT + file LICENSE",
       "URL": "https://jeroen.r-universe.dev/V8",
@@ -313,7 +284,7 @@
       "Language": "en-US",
       "Encoding": "UTF-8",
       "Biarch": "true",
-      "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Jan Marvin Garbuszus [ctb]",
+      "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>), George Stagg [ctb] (ORCID: <https://orcid.org/0009-0006-3173-9846>), Jan Marvin Garbuszus [ctb]",
       "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
       "Repository": "CRAN"
     },
@@ -612,8 +583,7 @@
       "NeedsCompilation": "no",
       "Author": "Jennifer Bryan [cre, aut], Hadley Wickham [ctb]",
       "Maintainer": "Jennifer Bryan <jenny@stat.ubc.ca>",
-      "Repository": "CRAN",
-      "Encoding": "UTF-8"
+      "Repository": "CRAN"
     },
     "class": {
       "Package": "class",
@@ -1011,7 +981,7 @@
       "NeedsCompilation": "yes",
       "Author": "David Meyer [aut, cre] (<https://orcid.org/0000-0002-5196-3048>), Evgenia Dimitriadou [aut, cph], Kurt Hornik [aut] (<https://orcid.org/0000-0003-4198-9911>), Andreas Weingessel [aut], Friedrich Leisch [aut], Chih-Chung Chang [ctb, cph] (libsvm C++-code), Chih-Chen Lin [ctb, cph] (libsvm C++-code)",
       "Maintainer": "David Meyer <David.Meyer@R-project.org>",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "evaluate": {
@@ -1079,7 +1049,7 @@
       "NeedsCompilation": "yes",
       "Author": "Martin Maechler [aut, cre] (<https://orcid.org/0000-0002-8685-9910>), Christophe Dutang [aut] (<https://orcid.org/0000-0001-6732-1501>), Vincent Goulet [aut] (<https://orcid.org/0000-0002-9315-5719>), Douglas Bates [ctb] (cosmetic clean up, in svn r42), David Firth [ctb] (expm(method= \"PadeO\" and \"TaylorO\")), Marina Shapira [ctb] (expm(method= \"PadeO\" and \"TaylorO\")), Michael Stadelmann [ctb] (\"Higham08*\" methods, see ?expm.Higham08...)",
       "Maintainer": "Martin Maechler <maechler@stat.math.ethz.ch>",
-      "Repository": "CRAN"
+      "Repository": "RSPM"
     },
     "farver": {
       "Package": "farver",
@@ -1103,71 +1073,6 @@
       "Author": "Thomas Lin Pedersen [cre, aut] (<https://orcid.org/0000-0002-5147-4711>), Berendea Nicolae [aut] (Author of the ColorSpace C++ library), Romain François [aut] (<https://orcid.org/0000-0002-2444-4226>), Posit, PBC [cph, fnd]",
       "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
       "Repository": "CRAN"
-    },
-    "fastRhockey": {
-      "Package": "fastRhockey",
-      "Version": "0.7.0",
-      "Source": "GitHub",
-      "Title": "Functions to Access Professional Women's Hockey League and National Hockey League Play by Play Data",
-      "Authors@R": "c( person(given = \"Ben\", family = \"Howell\", email = \"benhowell71@gmail.com\", role = c(\"aut\")), person(given = \"Saiem\", family = \"Gilani\", email = \"saiem.gilani@gmail.com\", role = c(\"cre\", \"aut\")), person(given = \"Alyssa\", family = \"Longmuir\", email = \"aklongmuir@gmail.com\", role = c(\"ctb\")) )",
-      "Description": "A utility to scrape and load play-by-play data and statistics from the Professional Women's Hockey League <https://www.thepwhl.com/>, formerly known as the Premier Hockey Federation (PHF) or National Women's Hockey League (NWHL). Additionally, allows access to the National Hockey League's stats API <https://www.nhl.com/>.",
-      "License": "MIT + file LICENSE",
-      "URL": "https://fastRhockey.sportsdataverse.org/, https://github.com/sportsdataverse/fastRhockey",
-      "BugReports": "https://github.com/sportsdataverse/fastRhockey/issues",
-      "Depends": [
-        "R (>= 4.0.0)"
-      ],
-      "Imports": [
-        "cli (>= 3.4.1)",
-        "data.table (>= 1.14.0)",
-        "dplyr (>= 1.0.10)",
-        "glue",
-        "httr (>= 0.5)",
-        "janitor",
-        "jsonlite",
-        "lubridate",
-        "magrittr",
-        "purrr (>= 1.0.0)",
-        "Rcpp",
-        "RcppParallel",
-        "rlang (>= 1.0.4)",
-        "rvest (>= 1.0.0)",
-        "stringr (>= 1.3.0)",
-        "tibble (>= 3.0)",
-        "tidyr (>= 1.0.0)"
-      ],
-      "Suggests": [
-        "crayon (>= 1.3.4)",
-        "curl",
-        "DBI",
-        "furrr",
-        "future",
-        "ggplot2",
-        "ggrepel",
-        "progressr (>= 0.6.0)",
-        "qs (>= 0.25.1)",
-        "rmarkdown",
-        "RSQLite",
-        "stringi",
-        "stats",
-        "testthat",
-        "usethis (>= 1.6.0)",
-        "xml2 (>= 1.3)"
-      ],
-      "Encoding": "UTF-8",
-      "Roxygen": "list(markdown = TRUE)",
-      "RoxygenNote": "7.3.1",
-      "Config/testthat/edition": "3",
-      "LazyData": "true",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "fastRhockey",
-      "RemoteUsername": "sportsdataverse",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "dcaf595d1840cb8e253e3f7266bc6e90b8b1a04a",
-      "NeedsCompilation": "no",
-      "Author": "Ben Howell [aut], Saiem Gilani [cre, aut], Alyssa Longmuir [ctb]",
-      "Maintainer": "Saiem Gilani <saiem.gilani@gmail.com>"
     },
     "fastmap": {
       "Package": "fastmap",
@@ -1360,7 +1265,7 @@
       "NeedsCompilation": "yes",
       "Author": "Robert King [aut, cre] (ORCID: <https://orcid.org/0000-0001-7495-6599>), Benjamin Dean [aut], Sigbert Klinke [aut], Paul van Staden [aut] (ORCID: <https://orcid.org/0000-0002-5710-5984>)",
       "Maintainer": "Robert King <Robert.King.Newcastle@gmail.com>",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "glue": {
@@ -1406,7 +1311,7 @@
     },
     "gt": {
       "Package": "gt",
-      "Version": "1.0.0",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Easily Create Presentation-Ready Display Tables",
@@ -1441,6 +1346,7 @@
         "xml2 (>= 1.3.6)"
       ],
       "Suggests": [
+        "farver",
         "fontawesome (>= 0.5.2)",
         "ggplot2",
         "grid",
@@ -1469,7 +1375,7 @@
       "LazyData": "true",
       "RoxygenNote": "7.3.2",
       "NeedsCompilation": "no",
-      "Author": "Richard Iannone [aut, cre] (<https://orcid.org/0000-0003-3925-190X>), Joe Cheng [aut], Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>), Ellis Hughes [aut] (<https://orcid.org/0000-0003-0637-4436>), Alexandra Lauer [aut] (<https://orcid.org/0000-0002-4191-6301>), JooYoung Seo [aut] (<https://orcid.org/0000-0002-4064-6012>), Ken Brevoort [aut] (<https://orcid.org/0000-0002-4001-8358>), Olivier Roy [aut], Posit Software, PBC [cph, fnd]",
+      "Author": "Richard Iannone [aut, cre] (ORCID: <https://orcid.org/0000-0003-3925-190X>), Joe Cheng [aut], Barret Schloerke [aut] (ORCID: <https://orcid.org/0000-0001-9986-114X>), Ellis Hughes [aut] (ORCID: <https://orcid.org/0000-0003-0637-4436>), Alexandra Lauer [aut] (ORCID: <https://orcid.org/0000-0002-4191-6301>), JooYoung Seo [aut] (ORCID: <https://orcid.org/0000-0002-4064-6012>), Ken Brevoort [aut] (ORCID: <https://orcid.org/0000-0002-4001-8358>), Olivier Roy [aut], Posit Software, PBC [cph, fnd]",
       "Maintainer": "Richard Iannone <rich@posit.co>",
       "Repository": "CRAN"
     },
@@ -1701,52 +1607,6 @@
       "NeedsCompilation": "no",
       "Author": "Hadley Wickham [aut, cre], Posit, PBC [cph, fnd]",
       "Maintainer": "Hadley Wickham <hadley@posit.co>",
-      "Repository": "CRAN"
-    },
-    "janitor": {
-      "Package": "janitor",
-      "Version": "2.2.1",
-      "Source": "Repository",
-      "Title": "Simple Tools for Examining and Cleaning Dirty Data",
-      "Authors@R": "c(person(\"Sam\", \"Firke\", email = \"samuel.firke@gmail.com\", role = c(\"aut\", \"cre\")), person(\"Bill\", \"Denney\", email = \"wdenney@humanpredictions.com\", role = \"ctb\"), person(\"Chris\", \"Haid\", email = \"chrishaid@gmail.com\", role = \"ctb\"), person(\"Ryan\", \"Knight\", email = \"ryangknight@gmail.com\", role = \"ctb\"), person(\"Malte\", \"Grosser\", email = \"malte.grosser@gmail.com\", role = \"ctb\"), person(\"Jonathan\", \"Zadra\", email = \"jonathan.zadra@sorensonimpact.com\", role = \"ctb\"))",
-      "Description": "The main janitor functions can: perfectly format data.frame column names; provide quick counts of variable combinations (i.e., frequency tables and crosstabs); and explore duplicate records. Other janitor functions nicely format the tabulation results. These tabulate-and-report functions approximate popular features of SPSS and Microsoft Excel. This package follows the principles of the \"tidyverse\" and works well with the pipe function %>%. janitor was built with beginning-to-intermediate R users in mind and is optimized for user-friendliness.",
-      "URL": "https://github.com/sfirke/janitor, https://sfirke.github.io/janitor/",
-      "BugReports": "https://github.com/sfirke/janitor/issues",
-      "Depends": [
-        "R (>= 3.1.2)"
-      ],
-      "Imports": [
-        "dplyr (>= 1.0.0)",
-        "hms",
-        "lifecycle",
-        "lubridate",
-        "magrittr",
-        "purrr",
-        "rlang",
-        "stringi",
-        "stringr",
-        "snakecase (>= 0.9.2)",
-        "tidyselect (>= 1.0.0)",
-        "tidyr (>= 0.7.0)"
-      ],
-      "License": "MIT + file LICENSE",
-      "RoxygenNote": "7.2.3",
-      "Suggests": [
-        "dbplyr",
-        "knitr",
-        "rmarkdown",
-        "RSQLite",
-        "sf",
-        "testthat (>= 3.0.0)",
-        "tibble",
-        "tidygraph"
-      ],
-      "VignetteBuilder": "knitr",
-      "Encoding": "UTF-8",
-      "Config/testthat/edition": "3",
-      "NeedsCompilation": "no",
-      "Author": "Sam Firke [aut, cre], Bill Denney [ctb], Chris Haid [ctb], Ryan Knight [ctb], Malte Grosser [ctb], Jonathan Zadra [ctb]",
-      "Maintainer": "Sam Firke <samuel.firke@gmail.com>",
       "Repository": "CRAN"
     },
     "jquerylib": {
@@ -2039,7 +1899,7 @@
       ],
       "License": "Common Public License Version 1.0",
       "NeedsCompilation": "yes",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "lubridate": {
@@ -2225,12 +2085,12 @@
       "NeedsCompilation": "yes",
       "Author": "Alan Genz [aut], Frank Bretz [aut], Tetsuhisa Miwa [aut], Xuefei Mi [aut], Friedrich Leisch [ctb], Fabian Scheipl [ctb], Bjoern Bornkamp [ctb] (<https://orcid.org/0000-0002-6294-8185>), Martin Maechler [ctb] (<https://orcid.org/0000-0002-8685-9910>), Torsten Hothorn [aut, cre] (<https://orcid.org/0000-0001-8301-0471>)",
       "Maintainer": "Torsten Hothorn <Torsten.Hothorn@R-project.org>",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.3.4",
+      "Version": "2.3.3",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Toolkit for Encryption, Signatures and Certificates Based on OpenSSL",
@@ -2259,7 +2119,7 @@
       "NeedsCompilation": "yes",
       "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Oliver Keyes [ctb]",
       "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-      "Repository": "RSPM"
+      "Repository": "CRAN"
     },
     "pillar": {
       "Package": "pillar",
@@ -2316,7 +2176,7 @@
       "NeedsCompilation": "no",
       "Author": "Kirill Müller [aut, cre] (ORCID: <https://orcid.org/0000-0002-1416-3412>), Hadley Wickham [aut], RStudio [cph]",
       "Maintainer": "Kirill Müller <kirill@cynkra.com>",
-      "Repository": "RSPM"
+      "Repository": "CRAN"
     },
     "pkgconfig": {
       "Package": "pkgconfig",
@@ -2423,7 +2283,7 @@
       "NeedsCompilation": "yes",
       "Author": "David Meyer [aut, cre], Christian Buchta [aut]",
       "Maintainer": "David Meyer <David.Meyer@R-project.org>",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "purrr": {
@@ -2876,7 +2736,7 @@
       "Description": "Routines to find the root of nonlinear functions, and to perform steady-state and equilibrium analysis of ordinary differential equations (ODE).  Includes routines that: (1) generate gradient and jacobian matrices (full and banded), (2) find roots of non-linear equations by the 'Newton-Raphson' method,  (3) estimate steady-state conditions of a system of (differential) equations in full, banded or sparse form, using the 'Newton-Raphson' method, or by dynamically running, (4) solve the steady-state conditions for uni-and multicomponent 1-D, 2-D, and 3-D partial differential equations, that have been converted to ordinary differential equations by numerical differencing (using the method-of-lines approach). Includes fortran code.",
       "License": "GPL (>= 2)",
       "NeedsCompilation": "yes",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
     "rstudioapi": {
@@ -2902,57 +2762,6 @@
       "Encoding": "UTF-8",
       "NeedsCompilation": "no",
       "Author": "Kevin Ushey [aut, cre], JJ Allaire [aut], Hadley Wickham [aut], Gary Ritchie [aut], RStudio [cph]",
-      "Repository": "CRAN"
-    },
-    "rvest": {
-      "Package": "rvest",
-      "Version": "1.0.5",
-      "Source": "Repository",
-      "Title": "Easily Harvest (Scrape) Web Pages",
-      "Authors@R": "c( person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"), comment = c(ROR = \"03wc8by49\")) )",
-      "Description": "Wrappers around the 'xml2' and 'httr' packages to make it easy to download, then manipulate, HTML and XML.",
-      "License": "MIT + file LICENSE",
-      "URL": "https://rvest.tidyverse.org/, https://github.com/tidyverse/rvest",
-      "BugReports": "https://github.com/tidyverse/rvest/issues",
-      "Depends": [
-        "R (>= 4.1)"
-      ],
-      "Imports": [
-        "cli",
-        "glue",
-        "httr (>= 0.5)",
-        "lifecycle (>= 1.0.3)",
-        "magrittr",
-        "rlang (>= 1.1.0)",
-        "selectr",
-        "tibble",
-        "xml2 (>= 1.4.0)"
-      ],
-      "Suggests": [
-        "chromote",
-        "covr",
-        "knitr",
-        "purrr",
-        "R6",
-        "readr",
-        "repurrrsive",
-        "rmarkdown",
-        "spelling",
-        "stringi (>= 0.3.1)",
-        "testthat (>= 3.0.2)",
-        "tidyr",
-        "webfakes"
-      ],
-      "VignetteBuilder": "knitr",
-      "Config/Needs/website": "tidyverse/tidytemplate",
-      "Config/testthat/edition": "3",
-      "Config/testthat/parallel": "true",
-      "Encoding": "UTF-8",
-      "Language": "en-US",
-      "RoxygenNote": "7.3.2",
-      "NeedsCompilation": "no",
-      "Author": "Hadley Wickham [aut, cre], Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
-      "Maintainer": "Hadley Wickham <hadley@posit.co>",
       "Repository": "CRAN"
     },
     "sass": {
@@ -3035,72 +2844,6 @@
       "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
       "Repository": "CRAN"
     },
-    "selectr": {
-      "Package": "selectr",
-      "Version": "0.4-2",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Translate CSS Selectors to XPath Expressions",
-      "Date": "2019-11-20",
-      "Authors@R": "c(person(\"Simon\", \"Potter\", role = c(\"aut\", \"trl\", \"cre\"), email = \"simon@sjp.co.nz\"), person(\"Simon\", \"Sapin\", role = \"aut\"), person(\"Ian\", \"Bicking\", role = \"aut\"))",
-      "License": "BSD_3_clause + file LICENCE",
-      "Depends": [
-        "R (>= 3.0)"
-      ],
-      "Imports": [
-        "methods",
-        "stringr",
-        "R6"
-      ],
-      "Suggests": [
-        "testthat",
-        "XML",
-        "xml2"
-      ],
-      "URL": "https://sjp.co.nz/projects/selectr",
-      "BugReports": "https://github.com/sjp/selectr/issues",
-      "Description": "Translates a CSS3 selector into an equivalent XPath expression. This allows us to use CSS selectors when working with the XML package as it can only evaluate XPath expressions. Also provided are convenience functions useful for using CSS selectors on XML nodes. This package is a port of the Python package 'cssselect' (<https://cssselect.readthedocs.io/>).",
-      "NeedsCompilation": "no",
-      "Author": "Simon Potter [aut, trl, cre], Simon Sapin [aut], Ian Bicking [aut]",
-      "Maintainer": "Simon Potter <simon@sjp.co.nz>",
-      "Repository": "CRAN",
-      "Encoding": "UTF-8"
-    },
-    "snakecase": {
-      "Package": "snakecase",
-      "Version": "0.11.1",
-      "Source": "Repository",
-      "Date": "2023-08-27",
-      "Title": "Convert Strings into any Case",
-      "Description": "A consistent, flexible and easy to use tool to parse and convert strings into cases like snake or camel among others.",
-      "Authors@R": "c( person(\"Malte\", \"Grosser\", , \"malte.grosser@gmail.com\", role = c(\"aut\", \"cre\")))",
-      "Maintainer": "Malte Grosser <malte.grosser@gmail.com>",
-      "Depends": [
-        "R (>= 3.2)"
-      ],
-      "Imports": [
-        "stringr",
-        "stringi"
-      ],
-      "Suggests": [
-        "testthat",
-        "covr",
-        "tibble",
-        "purrrlyr",
-        "knitr",
-        "rmarkdown",
-        "magrittr"
-      ],
-      "URL": "https://github.com/Tazinho/snakecase",
-      "BugReports": "https://github.com/Tazinho/snakecase/issues",
-      "Encoding": "UTF-8",
-      "License": "GPL-3",
-      "RoxygenNote": "6.1.1",
-      "VignetteBuilder": "knitr",
-      "NeedsCompilation": "no",
-      "Author": "Malte Grosser [aut, cre]",
-      "Repository": "CRAN"
-    },
     "stringi": {
       "Package": "stringi",
       "Version": "1.8.7",
@@ -3173,7 +2916,7 @@
       "NeedsCompilation": "no",
       "Author": "Hadley Wickham [aut, cre, cph], Posit Software, PBC [cph, fnd]",
       "Maintainer": "Hadley Wickham <hadley@posit.co>",
-      "Repository": "RSPM"
+      "Repository": "CRAN"
     },
     "sys": {
       "Package": "sys",
@@ -3547,7 +3290,7 @@
     },
     "vroom": {
       "Package": "vroom",
-      "Version": "1.6.5",
+      "Version": "1.6.6",
       "Source": "Repository",
       "Title": "Read and Write Rectangular Text Data Quickly",
       "Authors@R": "c( person(\"Jim\", \"Hester\", role = \"aut\", comment = c(ORCID = \"0000-0002-2739-7082\")), person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\", comment = c(ORCID = \"0000-0003-4757-117X\")), person(\"Jennifer\", \"Bryan\", , \"jenny@posit.co\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0002-6983-2759\")), person(\"Shelby\", \"Bearrows\", role = \"ctb\"), person(\"https://github.com/mandreyel/\", role = \"cph\", comment = \"mio library\"), person(\"Jukka\", \"Jylänki\", role = \"cph\", comment = \"grisu3 implementation\"), person(\"Mikkel\", \"Jørgensen\", role = \"cph\", comment = \"grisu3 implementation\"), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")) )",
@@ -3599,7 +3342,7 @@
       ],
       "LinkingTo": [
         "cpp11 (>= 0.2.0)",
-        "progress (>= 1.2.1)",
+        "progress (>= 1.2.3)",
         "tzdb (>= 0.1.1)"
       ],
       "VignetteBuilder": "knitr",
@@ -3609,9 +3352,9 @@
       "Copyright": "file COPYRIGHTS",
       "Encoding": "UTF-8",
       "Language": "en-US",
-      "RoxygenNote": "7.2.3.9000",
+      "RoxygenNote": "7.3.3",
       "NeedsCompilation": "yes",
-      "Author": "Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>), Hadley Wickham [aut] (<https://orcid.org/0000-0003-4757-117X>), Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>), Shelby Bearrows [ctb], https://github.com/mandreyel/ [cph] (mio library), Jukka Jylänki [cph] (grisu3 implementation), Mikkel Jørgensen [cph] (grisu3 implementation), Posit Software, PBC [cph, fnd]",
+      "Author": "Jim Hester [aut] (ORCID: <https://orcid.org/0000-0002-2739-7082>), Hadley Wickham [aut] (ORCID: <https://orcid.org/0000-0003-4757-117X>), Jennifer Bryan [aut, cre] (ORCID: <https://orcid.org/0000-0002-6983-2759>), Shelby Bearrows [ctb], https://github.com/mandreyel/ [cph] (mio library), Jukka Jylänki [cph] (grisu3 implementation), Mikkel Jørgensen [cph] (grisu3 implementation), Posit Software, PBC [cph, fnd]",
       "Maintainer": "Jennifer Bryan <jenny@posit.co>",
       "Repository": "CRAN"
     },
