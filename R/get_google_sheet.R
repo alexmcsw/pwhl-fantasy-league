@@ -3,7 +3,7 @@ get_google_sheet <- function(
     format = 'csv',
     sheetId = NULL
 ) {
-  
+
   # Taken from Max Conway: https://github.com/maxconway/gsheet/tree/master
   key <- stringr::str_extract(url, '[[:alnum:]_-]{30,}')
   if(is.null(sheetId) & stringr::str_detect(url, 'gid=[[:digit:]]+')){
@@ -13,13 +13,19 @@ get_google_sheet <- function(
   if(!is.null(sheetId)){
     address <- paste0(address, '&gid=', sheetId)
   }
-  
+
   df <- read_csv(
     address,
     col_types = cols(
-      team_1 = col_integer()
+      team_name = col_character(),
+      player_1 = col_integer(),
+      player_2 = col_integer(),
+      player_3 = col_integer(),
+      player_4 = col_integer(),
+      player_5 = col_integer(),
+      player_6 = col_integer()
     )
   )
-  
+
   return(df)
 }

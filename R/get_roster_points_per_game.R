@@ -1,4 +1,4 @@
-roster_points_per_game <- function(
+get_roster_points_per_game <- function(
     team_rosters,
     season,
     n_games = -1

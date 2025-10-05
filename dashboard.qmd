@@ -5,9 +5,7 @@ format: dashboard
 ---
 
 ```{r}
-
-library(dplyr)
-library(readr)
+library(tidyverse)
 library(gt)
 
 invisible(
@@ -26,81 +24,121 @@ season <- 2025
 
 all_teams <- team_stats(season)
 
-teams_idx <- get_google_sheet(
+rosters_idx <- get_google_sheet(
     sheetId = 0
 )
 
-team_rosters <- apply(
-    teams_idx,
-    2,
+rosters_idx <- rosters_idx |>
+    select(-team_name) |>
+    t() |>
+    data.frame() |>
+    set_names(
+        rosters_idx$team_name
+    )
+
+team_rosters <- rosters_idx |> map(
     filter_for_roster_idx
 )
 
-names(team_rosters) <- names(teams_idx)
-
-standings <- compute_standings(
-    team_rosters
-)
-
-roster_points_per_game <- roster_points_per_game(
+roster_points_per_game <- get_roster_points_per_game(
     team_rosters,
     season
 )
 
-```
-# Team Rosters
-
-## Row {.tabset}
-
-```{r}
-#| title: Team 1
-team_rosters$team_1 |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
+standings <- compute_standings(
+    roster_points_per_game
 )
-```
 
-```{r}
-#| title: Team 2
-team_rosters$team_2 |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
-)
-```
-
-```{r}
-#| title: Team 3
-team_rosters$team_3 |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
-)
 ```
 
 # Team Standings
 
-## Row {height=30%}
+## Row
 
 ```{r}
 standings |> gt()
 ```
 
-## Row {height=70%}
+## Row
 
 ```{r}
-plot(roster_points_per_game$team_1)
+roster_points_per_game |>
+mutate(
+    across(
+        names(team_rosters),
+        ~ .x |> as.numeric() |> cumsum()
+    ),
+    game_idx = 1:nrow(
+        roster_points_per_game
+    )
+) |>
+pivot_longer(
+    cols = names(team_rosters),
+    names_to = "team_name",
+    values_to = "cum_score"
+) |>
+ggplot() +
+geom_line(
+    aes(
+        x = game_idx,
+        y = cum_score,
+        colour = team_name
+    )
+)
+```
+
+# Team Rosters
+
+## Row {.tabset}
+
+```{r}
+#| title: Noah
+team_rosters$Noah |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
+```
+
+```{r}
+#| title: Alex
+team_rosters$Alex |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
+```
+
+```{r}
+#| title: Rambouillet
+team_rosters$Rambouillet |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
+```
+
+```{r}
+#| title: Meadow
+team_rosters$Meadow |> gt() |> text_transform(
+    locations = cells_body(columns = player_headshot),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "50px"
+        )
+    }
+)
 ```

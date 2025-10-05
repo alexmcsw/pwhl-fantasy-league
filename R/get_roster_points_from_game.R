@@ -17,7 +17,7 @@ get_roster_points_from_game <- function(
                 player_id %in% team_rosters[team_name][[1]]$player_id
             ) |> select(
                 points
-            ) |> sum()
+            ) |> sum() |> as.numeric()
         )
     }
 

@@ -1,19 +1,34 @@
 compute_standings <- function(
-    team_rosters
+    roster_points_per_game
 ) {
-    standings <- data.frame(
-        team_names=names(team_rosters)
-    )
+    standings <- roster_points_per_game |>
+        select(-game_id) |>
+        mutate_all(
+            as.numeric
+        ) |> map(
+            sum
+        )
 
-    standings$points <- apply(
-        standings,
-        1,
-        function(x) team_rosters[x][[1]]$points %>% as.numeric %>% sum
-    )
-
-    standings <- standings %>% arrange(
-        desc(
-            points
+    standings <- standings[
+        order(
+            unlist(
+                standings
+            ),
+            decreasing=TRUE
+        )
+    ] |>
+    stack() |>
+    set_names(
+        c(
+            "points",
+            "team_name"
         )
     )
+
+    standings <- standings[
+        c(
+            "team_name",
+            "points"
+        )
+    ]
 }
