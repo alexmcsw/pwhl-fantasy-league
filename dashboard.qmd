@@ -166,7 +166,7 @@ tab_header(
 ## Row
 
 ```{r}
-#| title: "Standings"
+#| title: "Standings summary"
 standings |> gt()
 ```
 
@@ -263,4 +263,14 @@ team_rosters$Meadow |> gt() |> text_transform(
         )
     }
 )
+```
+
+# Schedule
+
+## Row
+
+```{r}
+#| title: Schedule
+schedule |>
+gt()
 ```
