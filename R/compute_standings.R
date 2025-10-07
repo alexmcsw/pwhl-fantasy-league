@@ -2,12 +2,15 @@ compute_standings <- function(
     roster_points_per_game
 ) {
     standings <- roster_points_per_game |>
-        select(-game_id) |>
-        mutate_all(
-            as.numeric
-        ) |> map(
-            sum
+    summarise(
+        across(
+            everything(),
+            ~ sum(
+                .,
+                na.rm = TRUE
+            )
         )
+    )
 
     standings <- standings[
         order(

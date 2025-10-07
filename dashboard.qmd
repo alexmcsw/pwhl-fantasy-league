@@ -24,10 +24,24 @@ season <- 2025
 
 all_teams <- team_stats(season)
 
+schedule <- pwhl_schedule(
+    season
+)
+
+player_boxes_per_game <- list()
+
+for (game_id in schedule$game_id[1:5]) {
+    player_boxes_per_game[[game_id]] <- pwhl_player_box(
+        game_id=game_id
+    )
+}
+
 rosters_idx <- get_google_sheet(
     sheetId = 0
 )
+```
 
+```{r}
 rosters_idx <- rosters_idx |>
     select(-team_name) |>
     t() |>
@@ -37,18 +51,35 @@ rosters_idx <- rosters_idx |>
     )
 
 team_rosters <- rosters_idx |> map(
-    filter_for_roster_idx
+    filter_for_roster_idx,
+    all_teams = all_teams
 )
 
 roster_points_per_game <- get_roster_points_per_game(
     team_rosters,
-    season
+    player_boxes_per_game
 )
 
 standings <- compute_standings(
     roster_points_per_game
 )
 
+```
+
+# Overview
+
+## Row
+
+```{r}
+
+
+
+```
+
+## Row
+
+```{r}
+standings |> gt()
 ```
 
 # Team Standings
