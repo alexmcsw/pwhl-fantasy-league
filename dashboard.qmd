@@ -29,7 +29,7 @@ all_teams <- team_stats(season)
 
 schedule <- pwhl_schedule(
     season
-) 
+)
 
 schedule$game_date <- schedule$game_date |>
 str_split_i(
@@ -130,6 +130,8 @@ filter(
 ```
 
 # Overview
+
+(Fake) Current date: `{r} current_date`
 
 ## Row
 
