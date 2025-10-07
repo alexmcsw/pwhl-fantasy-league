@@ -22,32 +22,52 @@ invisible(
 ```{r}
 season <- 2025
 
+current_date <- "2024-12-05"
+season_start <- "2024-11-30"
+
 all_teams <- team_stats(season)
 
 schedule <- pwhl_schedule(
     season
+) 
+
+schedule$game_date <- schedule$game_date |>
+str_split_i(
+    pattern=",",
+    i=-1
+) |>
+trimws() |>
+map(
+    parse_schedule_year,
+    season_start=season_start
 )
+
+schedule_to_date <- schedule |>
+filter(
+    game_date < ymd(current_date)
+)
+
 
 player_boxes_per_game <- list()
 
-for (game_id in schedule$game_id[1:5]) {
+for (game_id in schedule_to_date$game_id) {
     player_boxes_per_game[[game_id]] <- pwhl_player_box(
         game_id=game_id
     )
 }
 
-rosters_idx <- get_google_sheet(
+rosters_idx_gsheet <- get_google_sheet(
     sheetId = 0
 )
 ```
 
 ```{r}
-rosters_idx <- rosters_idx |>
+rosters_idx <- rosters_idx_gsheet |>
     select(-team_name) |>
     t() |>
     data.frame() |>
     set_names(
-        rosters_idx$team_name
+        rosters_idx_gsheet$team_name
     )
 
 team_rosters <- rosters_idx |> map(
@@ -64,6 +84,49 @@ standings <- compute_standings(
     roster_points_per_game
 )
 
+last_game_day_date <- Filter(
+    function(x) ymd(x) < ymd(current_date),
+    schedule$game_date
+) |> last()
+
+last_game_day <- schedule |>
+filter(
+    game_date == ymd(
+        last_game_day_date
+    )
+) |> select(
+    c(
+        "game_id",
+        "home_team",
+        "away_team"
+    )
+) |> mutate(
+    roster_points_per_game[game_id,]
+) |> select(
+    c(
+        "home_team",
+        "away_team",
+        names(roster_points_per_game)
+    )
+)
+
+next_game_day_date <- Filter(
+    function(x) ymd(x) >= ymd(current_date),
+    schedule$game_date
+)[[1]]
+
+next_game_day <- schedule |>
+filter(
+    game_date == ymd(
+        next_game_day_date
+    )
+) |> select(
+    c(
+        "home_team",
+        "away_team"
+    )
+)
+
 ```
 
 # Overview
@@ -71,14 +134,39 @@ standings <- compute_standings(
 ## Row
 
 ```{r}
+#| title:  Next game(s)
 
-
+next_game_day |>
+gt() |>
+tab_header(
+    title = format(
+        next_game_day_date,
+        "Next game day: %B%e, %Y"
+    )
+)
 
 ```
 
 ## Row
 
 ```{r}
+#| title:  Last game day summary
+
+last_game_day |>
+gt() |>
+tab_header(
+    title = format(
+        last_game_day_date,
+        "Last game day: %B%e, %Y"
+    )
+)
+
+```
+
+## Row
+
+```{r}
+#| title: "Standings"
 standings |> gt()
 ```
 
@@ -87,12 +175,15 @@ standings |> gt()
 ## Row
 
 ```{r}
+#| title: "Standings"
 standings |> gt()
 ```
 
 ## Row
 
 ```{r}
+#| title: "Standings over time"
+
 roster_points_per_game |>
 mutate(
     across(
