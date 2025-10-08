@@ -7,6 +7,7 @@ format: dashboard
 ```{r}
 library(tidyverse)
 library(gt)
+library(DT)
 
 invisible(
     lapply(
@@ -202,28 +203,61 @@ text_transform(
 #| title:  Last game day summary
 
 last_game_day |>
-gt() |>
+gt(
+    groupname_col = c(
+        "home_team_logo",
+        "away_team_logo"
+    )
+) |>
 tab_header(
     title = format(
         last_game_day_date,
-        "Last game day: %B%e, %Y"
+        "%B%e, %Y"
+    )
+) |>
+tab_stubhead(
+    label = c(
+        "Home",
+        "Away"
     )
 ) |>
 text_transform(
-    locations = cells_body(
-        columns = c(
-            "home_team_logo",
-            "away_team_logo"
-        )
-    ),
+    locations = cells_row_groups(),
     fn = function(x) {
-        web_image(
-            url = x,
-            height = "5vh"
-        )
+      lapply(
+        x,
+        function(x) {        
+            html(
+                paste0(
+                    web_image(
+                        url = sapply(
+                            strsplit(
+                                x,
+                                " - "
+                            ),
+                            `[`,
+                            1
+                        ),
+                        height = "5vh"
+                    ),
+                    "<span> vs. </span>",
+                    web_image(
+                        url = sapply(
+                            strsplit(
+                                x,
+                                " - "
+                            ),
+                            `[`,
+                            2
+                        ),
+                        height = "5vh"
+                    )
+                )
+            )
+        }
+      )
     }
 )
-
 ```
 
 ## Row
