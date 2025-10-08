@@ -18,6 +18,7 @@ get_google_sheet <- function(
     address,
     col_types = cols(
       team_name = col_character(),
+      team_image = col_character(),
       player_1 = col_integer(),
       player_2 = col_integer(),
       player_3 = col_integer(),

@@ -87,11 +87,16 @@ for (game_id in schedule_to_date$game_id) {
 rosters_idx_gsheet <- get_google_sheet(
     sheetId = 0
 )
+
+team_images <- rosters_idx_gsheet$team_image |>
+set_names(
+    rosters_idx_gsheet$team_name
+)
 ```
 
 ```{r}
 rosters_idx <- rosters_idx_gsheet |>
-    select(-team_name) |>
+    select(!(team_name:team_image)) |>
     t() |>
     data.frame() |>
     set_names(
@@ -225,7 +230,28 @@ text_transform(
 
 ```{r}
 #| title: "Standings"
-standings |> gt()
+standings |> mutate(
+    team_image = recode(
+        team_name,
+        !!!team_images
+    )
+) |>
+select(
+    team_image,
+    points
+) |>
+gt() |>
+text_transform(
+    locations = cells_body(
+        columns = team_image
+    ),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "5vh"
+        )
+    }
+)
 ```
 
 # Team Standings
@@ -234,7 +260,29 @@ standings |> gt()
 
 ```{r}
 #| title: "Standings"
-standings |> gt()
+standings |> mutate(
+    team_image = recode(
+        team_name,
+        !!!team_images
+    )
+) |>
+select(
+    team_name,
+    team_image,
+    points
+) |>
+gt() |>
+text_transform(
+    locations = cells_body(
+        columns = team_image
+    ),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "5vh"
+        )
+    }
+)
 ```
 
 ## Row
