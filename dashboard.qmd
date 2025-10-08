@@ -25,11 +25,39 @@ season <- 2025
 current_date <- "2024-12-05"
 season_start <- "2024-11-30"
 
+team_logo_urls <- c(
+    "https://upload.wikimedia.org/wikipedia/en/b/bc/BostonFleet.png",
+    "https://upload.wikimedia.org/wikipedia/en/a/ae/MinnesotaFrost.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/9/93/Montreal_Victoire_Logo.svg/800px-Montreal_Victoire_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/New_York_Sirens_Logo.svg/1024px-New_York_Sirens_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Ottawa_Charge_Logo.svg/1280px-Ottawa_Charge_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Toronto_Sceptres.svg/800px-Toronto_Sceptres.svg.png"
+)
+
+names(team_logo_urls) <- pwhl_teams()$team_label |>
+recode(
+    "Montreal"="Montréal"
+)
+
 all_teams <- team_stats(season)
 
 schedule <- pwhl_schedule(
     season
 )
+
+schedule$home_team_logo <- team_logo_urls[
+    match(
+        schedule$home_team,
+        names(team_logo_urls)
+    )
+]
+
+schedule$away_team_logo <- team_logo_urls[
+    match(
+        schedule$away_team,
+        names(team_logo_urls)
+    )
+]
 
 schedule$game_date <- schedule$game_date |>
 str_split_i(
@@ -97,15 +125,15 @@ filter(
 ) |> select(
     c(
         "game_id",
-        "home_team",
-        "away_team"
+        "home_team_logo",
+        "away_team_logo"
     )
 ) |> mutate(
     roster_points_per_game[game_id,]
 ) |> select(
     c(
-        "home_team",
-        "away_team",
+        "home_team_logo",
+        "away_team_logo",
         names(roster_points_per_game)
     )
 )
@@ -122,8 +150,8 @@ filter(
     )
 ) |> select(
     c(
-        "home_team",
-        "away_team"
+        "home_team_logo",
+        "away_team_logo"
     )
 )
 
@@ -145,6 +173,20 @@ tab_header(
         next_game_day_date,
         "Next game day: %B%e, %Y"
     )
+) |>
+text_transform(
+    locations = cells_body(
+        columns = c(
+            "home_team_logo",
+            "away_team_logo"
+        )
+    ),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "5vh"
+        )
+    }
 )
 
 ```
@@ -161,6 +203,20 @@ tab_header(
         last_game_day_date,
         "Last game day: %B%e, %Y"
     )
+) |>
+text_transform(
+    locations = cells_body(
+        columns = c(
+            "home_team_logo",
+            "away_team_logo"
+        )
+    ),
+    fn = function(x) {
+        web_image(
+            url = x,
+            height = "5vh"
+        )
+    }
 )
 
 ```
