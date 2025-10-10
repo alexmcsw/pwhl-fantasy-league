@@ -199,10 +199,18 @@ p_args <-map(
 
 value_box(
     title = "Next game day",
-    value = format(
-        next_game_day_date,
-        "%b%e, %Y"
+    showcase = bs_icon(
+        "calendar-event",
+        size="6vh"
     ),
+    value = tags$p(
+        format(
+            next_game_day_date,
+            "%b%e, %Y"
+        ),
+        style = "font-size: 4vh;"
+    ),
+    theme = "success",
     !!!p_args
 )
 ```
