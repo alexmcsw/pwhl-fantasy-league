@@ -7,7 +7,9 @@ format: dashboard
 ```{r}
 library(tidyverse)
 library(gt)
-library(DT)
+library(bslib)
+library(shiny)
+library(bsicons)
 
 invisible(
     lapply(
@@ -23,7 +25,7 @@ invisible(
 ```{r}
 season <- 2025
 
-current_date <- "2024-12-05"
+current_date <- "2024-12-04"
 season_start <- "2024-11-30"
 
 team_logo_urls <- c(
@@ -36,6 +38,13 @@ team_logo_urls <- c(
 )
 
 names(team_logo_urls) <- pwhl_teams()$team_label |>
+recode(
+    "Montreal"="Montréal"
+)
+
+team_codes <- pwhl_teams()$team_code
+
+names(team_codes) <- pwhl_teams()$team_label |>
 recode(
     "Montreal"="Montréal"
 )
@@ -53,10 +62,24 @@ schedule$home_team_logo <- team_logo_urls[
     )
 ]
 
+schedule$home_team_code <- team_codes[
+    match(
+        schedule$home_team,
+        names(team_codes)
+    )
+]
+
 schedule$away_team_logo <- team_logo_urls[
     match(
         schedule$away_team,
         names(team_logo_urls)
+    )
+]
+
+schedule$away_team_code <- team_codes[
+    match(
+        schedule$away_team,
+        names(team_codes)
     )
 ]
 
@@ -115,7 +138,8 @@ roster_points_per_game <- get_roster_points_per_game(
 )
 
 standings <- compute_standings(
-    roster_points_per_game
+    roster_points_per_game,
+    team_images
 )
 
 last_game_day_date <- Filter(
@@ -128,20 +152,8 @@ filter(
     game_date == ymd(
         last_game_day_date
     )
-) |> select(
-    c(
-        "game_id",
-        "home_team_logo",
-        "away_team_logo"
-    )
 ) |> mutate(
     roster_points_per_game[game_id,]
-) |> select(
-    c(
-        "home_team_logo",
-        "away_team_logo",
-        names(roster_points_per_game)
-    )
 )
 
 next_game_day_date <- Filter(
@@ -154,13 +166,9 @@ filter(
     game_date == ymd(
         next_game_day_date
     )
-) |> select(
-    c(
-        "home_team_logo",
-        "away_team_logo"
-    )
+) |> mutate(
+    time = "6:00pm EST"
 )
-
 ```
 
 # Overview
@@ -169,22 +177,26 @@ filter(
 
 ## Row
 
-```{r}
-#| title:  Next game(s)
-
+<!-- ```{r}
+#| content: valuebox
 next_game_day |>
-gt() |>
+gt(
+    rowname_col = "Time"
+) |>
 tab_header(
     title = format(
         next_game_day_date,
-        "Next game day: %B%e, %Y"
+        "%B%e, %Y"
     )
+) |>
+tab_stubhead(
+    label = "Time"
 ) |>
 text_transform(
     locations = cells_body(
         columns = c(
-            "home_team_logo",
-            "away_team_logo"
+            Home,
+            Away
         )
     ),
     fn = function(x) {
@@ -195,14 +207,54 @@ text_transform(
     }
 )
 
+``` -->
+
+```{r}
+value_box(
+    title = "Next game day",
+    value = format(
+        next_game_day_date,
+        "%b%e, %Y"
+    ),
+    p(
+        paste0(
+            next_game_day[1,"home_team_code"],
+            " @ ",
+            next_game_day[1,"away_team_code"],
+            ", ",
+            next_game_day[1,"time"]
+        )
+    ),
+    p(
+        paste0(
+            next_game_day[2,"home_team_code"],
+            " @ ",
+            next_game_day[2,"away_team_code"],
+            ", ",
+            next_game_day[2,"time"]
+        )
+    )
+
+)
 ```
 
 ## Row
 
 ```{r}
-#| title:  Last game day summary
+#| content: valuebox
+#| title: "Last game day summary"
 
-last_game_day |>
+last_game_day |> select(
+    c(
+        "home_team_logo",
+        "home_score",
+        "away_team_logo",
+        "away_score",
+        names(
+            team_rosters
+        )
+    )
+) |>
 gt(
     groupname_col = c(
         "home_team_logo",
@@ -264,20 +316,17 @@ text_transform(
 
 ```{r}
 #| title: "Standings"
-standings |> mutate(
-    team_image = recode(
-        team_name,
-        !!!team_images
-    )
-) |>
+standings |>
 select(
-    team_image,
-    points
+    c(
+        Team,
+        Points
+    )
 ) |>
 gt() |>
 text_transform(
     locations = cells_body(
-        columns = team_image
+        columns = Team
     ),
     fn = function(x) {
         web_image(
@@ -294,21 +343,11 @@ text_transform(
 
 ```{r}
 #| title: "Standings"
-standings |> mutate(
-    team_image = recode(
-        team_name,
-        !!!team_images
-    )
-) |>
-select(
-    team_name,
-    team_image,
-    points
-) |>
+standings |>
 gt() |>
 text_transform(
     locations = cells_body(
-        columns = team_image
+        columns = Team
     ),
     fn = function(x) {
         web_image(
@@ -353,8 +392,17 @@ geom_line(
 
 ## Row {.tabset}
 
+### Noah
+
 ```{r}
-#| title: Noah
+
+html(
+    web_image(
+        url = team_images["Noah"],
+        height = "50px"
+    )
+)
+
 team_rosters$Noah |> gt() |> text_transform(
     locations = cells_body(columns = player_headshot),
     fn = function(x) {
@@ -366,8 +414,9 @@ team_rosters$Noah |> gt() |> text_transform(
 )
 ```
 
+### Alex
+
 ```{r}
-#| title: Alex
 team_rosters$Alex |> gt() |> text_transform(
     locations = cells_body(columns = player_headshot),
     fn = function(x) {
@@ -379,8 +428,9 @@ team_rosters$Alex |> gt() |> text_transform(
 )
 ```
 
+### Rambouillet
+
 ```{r}
-#| title: Rambouillet
 team_rosters$Rambouillet |> gt() |> text_transform(
     locations = cells_body(columns = player_headshot),
     fn = function(x) {
@@ -392,8 +442,9 @@ team_rosters$Rambouillet |> gt() |> text_transform(
 )
 ```
 
+### Meadow
+
 ```{r}
-#| title: Meadow
 team_rosters$Meadow |> gt() |> text_transform(
     locations = cells_body(columns = player_headshot),
     fn = function(x) {

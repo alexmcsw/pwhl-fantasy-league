@@ -1,5 +1,6 @@
 compute_standings <- function(
-    roster_points_per_game
+    roster_points_per_game,
+    team_images
 ) {
     standings <- roster_points_per_game |>
     summarise(
@@ -28,10 +29,20 @@ compute_standings <- function(
         )
     )
 
-    standings <- standings[
-        c(
-            "team_name",
-            "points"
+    standings <- standings |> mutate(
+        Team = recode(
+            team_name,
+            !!!team_images
         )
-    ]
+    ) |>
+    rename(
+        Name = team_name,
+        Points = points
+    ) |> select(
+        c(
+            "Name",
+            "Team",
+            "Points"
+        )
+    )
 }
