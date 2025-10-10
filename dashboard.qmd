@@ -25,7 +25,7 @@ invisible(
 ```{r}
 season <- 2025
 
-current_date <- "2024-12-05"
+current_date <- "2024-12-04"
 season_start <- "2024-11-30"
 
 team_logo_urls <- c(
