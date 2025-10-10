@@ -25,7 +25,7 @@ invisible(
 ```{r}
 season <- 2025
 
-current_date <- "2024-12-04"
+current_date <- "2024-12-05"
 season_start <- "2024-11-30"
 
 team_logo_urls <- c(
@@ -218,74 +218,49 @@ value_box(
 ## Row
 
 ```{r}
-#| content: valuebox
 #| title: "Last game day summary"
 
-last_game_day |> select(
+last_game_day |> mutate(
+    temp = "-"
+) |> select(
     c(
+        "home_team_code",
         "home_team_logo",
         "home_score",
-        "away_team_logo",
+        "temp",
         "away_score",
-        names(
-            team_rosters
-        )
+        "away_team_logo",
+        "away_team_code"
     )
 ) |>
-gt(
-    groupname_col = c(
-        "home_team_logo",
-        "away_team_logo"
-    )
-) |>
+gt() |>
 tab_header(
     title = format(
         last_game_day_date,
         "%B%e, %Y"
     )
 ) |>
-tab_stubhead(
-    label = c(
-        "Home",
-        "Away"
-    )
-) |>
 text_transform(
-    locations = cells_row_groups(),
+    locations = cells_body(
+        columns = c(
+            "home_team_logo",
+            "away_team_logo"
+        )
+    ),
     fn = function(x) {
-      lapply(
-        x,
-        function(x) {        
-            html(
-                paste0(
-                    web_image(
-                        url = sapply(
-                            strsplit(
-                                x,
-                                " - "
-                            ),
-                            `[`,
-                            1
-                        ),
-                        height = "5vh"
-                    ),
-                    "<span> vs. </span>",
-                    web_image(
-                        url = sapply(
-                            strsplit(
-                                x,
-                                " - "
-                            ),
-                            `[`,
-                            2
-                        ),
-                        height = "5vh"
-                    )
-                )
-            )
-        }
-      )
+        web_image(
+            url = x,
+            height = "5vh"
+        )
     }
+) |> cols_label(
+    home_team_code = "",
+    home_team_logo = "Home",
+    home_score = "",
+    temp = "",
+    away_score = "",
+    away_team_logo = "Away",
+    away_team_code = ""
 )
 ```
 
