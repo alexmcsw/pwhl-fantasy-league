@@ -206,7 +206,9 @@ pwhl_teams <- function() {
             "PWHL Montreal",
             "PWHL New York",
             "PWHL Ottawa",
-            "PWHL Toronto"
+            "PWHL Toronto",
+            "PWHL Seattle",
+            "PWHL Vancouver"
           ),
           team_label = c(
             "Boston",
@@ -214,7 +216,9 @@ pwhl_teams <- function() {
             "Montreal",
             "New York",
             "Ottawa",
-            "Toronto"
+            "Toronto",
+            "Seattle",
+            "Vancouver"
           )
         )
 
