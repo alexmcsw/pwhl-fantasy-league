@@ -25,7 +25,7 @@ invisible(
 ```{r}
 season <- 2025
 
-current_date <- "2024-12-04"
+current_date <- "2024-12-05"
 season_start <- "2024-11-30"
 
 team_logo_urls <- c(
@@ -177,64 +177,33 @@ filter(
 
 ## Row
 
-<!-- ```{r}
-#| content: valuebox
-next_game_day |>
-gt(
-    rowname_col = "Time"
-) |>
-tab_header(
-    title = format(
-        next_game_day_date,
-        "%B%e, %Y"
-    )
-) |>
-tab_stubhead(
-    label = "Time"
-) |>
-text_transform(
-    locations = cells_body(
-        columns = c(
-            Home,
-            Away
+```{r}
+
+p_args <- next_game_day |>
+mutate(
+    temp = paste0(
+            home_team_code,
+            " @ ",
+            away_team_code,
+            ", ",
+            time
         )
-    ),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "5vh"
-        )
-    }
+) |> select(
+    temp
 )
 
-``` -->
+p_args <-map(
+    p_args[,1],
+    p
+)
 
-```{r}
 value_box(
     title = "Next game day",
     value = format(
         next_game_day_date,
         "%b%e, %Y"
     ),
-    p(
-        paste0(
-            next_game_day[1,"home_team_code"],
-            " @ ",
-            next_game_day[1,"away_team_code"],
-            ", ",
-            next_game_day[1,"time"]
-        )
-    ),
-    p(
-        paste0(
-            next_game_day[2,"home_team_code"],
-            " @ ",
-            next_game_day[2,"away_team_code"],
-            ", ",
-            next_game_day[2,"time"]
-        )
-    )
-
+    !!!p_args
 )
 ```
 
