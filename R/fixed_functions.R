@@ -168,13 +168,21 @@ pwhl_stats_fix <- function(
 #' }
 
 pwhl_teams <- function(
-  season,
-  game_type = "preseason"
+  season = 2023,
+  game_type = "preseason",
+  season_id = NULL
 ) {
-  seasons <- pwhl_season_id() %>%
-    dplyr::filter(season_yr == season, game_type_label == game_type)
 
-  season_id <- seasons$season_id
+  if (
+    is.null(
+      season_id
+    )
+  ) {
+    seasons <- pwhl_season_id() %>%
+      dplyr::filter(season_yr == season, game_type_label == game_type)
+
+    season_id <- seasons$season_id
+  }
 
   full_url = glue::glue(
     "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=teamsForSeason&season={season_id}&key=694cfeed58c932ee&client_code=pwhl&site_id=2&callback=angular.callbacks._4"
@@ -464,12 +472,18 @@ pwhl_team_roster <- function(
 #'   try(pwhl_schedule(season = 2023))
 #' }
 
-pwhl_schedule <- function(season, game_type = "regular") {
+pwhl_schedule <- function(season = 2023, game_type = "regular", season_id = NULL) {
 
-  seasons <- pwhl_season_id() %>%
-    dplyr::filter(season_yr == season, game_type_label == game_type)
+  if (
+    is.null(
+      season_id
+    )
+  ) {
+    seasons <- pwhl_season_id() %>%
+      dplyr::filter(season_yr == season, game_type_label == game_type)
 
-  season_id <- seasons$season_id
+    season_id <- seasons$season_id
+  }
 
   base_url = glue::glue(
     "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=schedule&team=-1&season={season_id}&month=-1&location=homeaway&key=694cfeed58c932ee&client_code=pwhl&site_id=2&league_id=1&division_id=-1&lang=en&callback=angular.callbacks._1"

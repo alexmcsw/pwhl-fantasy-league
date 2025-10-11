@@ -23,33 +23,99 @@ invisible(
 ```
 
 ```{r "read API data"}
-season <- 2026
+season_dates_and_type <- get_season_dates_and_type()
 
 current_date = today()
+current_date = "2024-11-22"
 
-preseason_start <- "2025-11-13"
-preseason_end <- "2025-11-17"
-regular_start <- "2025-11-21"
-regular_end <- "2026-04-25"
+season_row_idx_for_current_date <- season_dates_and_type |>
+(\(x) x$start_date < current_date & x$end_date >= current_date)() |>
+which()
+
+last_game_day_date <- "tbd"
+next_game_day_date <- "tbd"
+season_id <- season_dates_and_type[
+    season_row_idx_for_current_date,
+    "season_id"
+]
 
 if (
-    ymd(current_date) <= ymd(preseason_end)
+    length(
+        season_row_idx_for_current_date
+    )== 0
 ) {
-    game_type = "preseason"
-    season_start = preseason_start
-} else if (
-    ymd(current_date) <= ymd(regular_end)
+    season_row_idx_for_current_date <- season_dates_and_type |>
+    (\(x) x$start_date >= current_date)() |>
+    which() |>
+    first()
+
+    if (
+        season_row_idx_for_current_date == 1
+    ) {
+        last_game_day_date <- NULL
+    } else {
+        last_game_day_date <- season_dates_and_type[
+            season_row_idx_for_current_date - 1,
+            "end_date"
+        ]
+    }
+
+    next_game_day_date <- season_dates_and_type[
+        season_row_idx_for_current_date,
+        "start_date"
+    ]
+
+    season_id <- season_dates_and_type[
+        season_row_idx_for_current_date,
+        "season_id"
+    ]
+}
+
+if (
+    is.na(
+        season_row_idx_for_current_date
+    )
 ) {
-    game_type = "preseason"
-    season_start = regular_start
-} else {
-    game_type = "playoffs"
-    season_start = playoffs_start
+    season_row_idx_for_current_date <- rownames(
+        season_dates_and_type
+    ) |>
+    max()
+
+    last_game_day_date <- season_dates_and_type[
+        season_row_idx_for_current_date,
+        "end_date"
+    ]
+
+    next_game_day_date <- NULL
+    season_id <- NULL
+}
+
+if (
+    !is.null(
+        season_id
+    )
+) {
+    season = season_dates_and_type |>
+    filter(
+        season_id == .env$season_id
+    ) |>
+    select(
+        season_yr
+    ) |>
+    as.numeric()
+
+    game_type <- season_dates_and_type |>
+    filter(
+        season_id == .env$season_id
+    ) |>
+    select(
+        game_type_label
+    ) |>
+    as.character()
 }
 
 teams <- pwhl_teams(
-    season = season,
-    game_type = game_type
+    season_id = season_id
 )
 
 team_logo_urls <- c(
@@ -82,8 +148,7 @@ all_teams <- team_stats(
 )
 
 schedule <- pwhl_schedule(
-    season = season,
-    game_type = game_type
+    season_id = season_id
 )
 
 schedule$home_team_logo <- team_logo_urls[
@@ -122,7 +187,10 @@ str_split_i(
 trimws() |>
 map(
     parse_schedule_year,
-    season_start=season_start
+    season_start=season_dates_and_type[
+        season_id,
+        "start_date"
+    ]
 )
 
 schedule_to_date <- schedule |>
@@ -173,10 +241,18 @@ standings <- compute_standings(
     team_images
 )
 
-last_game_day_date <- Filter(
-    function(x) ymd(x) < ymd(current_date),
-    schedule$game_date
-) |> last()
+if (
+    as.character(
+        last_game_day_date
+    ) == "tbd"
+) {
+    last_game_day_date <- Filter(
+        function(x) ymd(x) < ymd(current_date),
+        schedule$game_date
+    ) |> last()
+}
+
+
 
 if (
     is.null(
@@ -195,10 +271,16 @@ if (
     )
 }
 
-next_game_day_date <- Filter(
-    function(x) ymd(x) >= ymd(current_date),
-    schedule$game_date
-)[[1]]
+if (
+    as.character(
+        next_game_day_date
+    ) == "tbd"
+) {
+    next_game_day_date <- Filter(
+        function(x) ymd(x) >= ymd(current_date),
+        schedule$game_date
+    )[[1]]
+}
 
 next_game_day <- schedule |>
 filter(
@@ -253,12 +335,30 @@ value_box(
 ## Row
 
 ```{r "last game day"}
-if (last_game_day) {
+if (
+    nrow(
+        roster_points_per_game
+    ) == 0
+) {
+
+    value_box(
+        title = "No data available",
+        showcase = bs_icon(
+            "hourglass-split",
+            size="6vh"
+        ),
+        value = tags$p(
+            "No games played yet this season",
+            style = "font-size: 4vh;"
+        ),
+        theme = "danger"
+    )
+} else {
 
     value_box(
         title = format(
                 last_game_day_date,
-                "Last game day (%B%e, %Y)"
+                "Last game day (%B %e, %Y)"
             ),
         value = last_game_day |> mutate(
             temp = "-"
@@ -297,20 +397,6 @@ if (last_game_day) {
             away_team_code = ""
         ),
         theme = "success"
-    )
-} else {
-
-    value_box(
-        title = "No data available",
-        showcase = bs_icon(
-            "hourglass-split",
-            size="6vh"
-        ),
-        value = tags$p(
-            "No games played yet this season",
-            style = "font-size: 4vh;"
-        ),
-        theme = "danger"
     )
 }
 

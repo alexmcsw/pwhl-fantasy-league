@@ -10,7 +10,7 @@ parse_schedule_year <- function(
             game_date
         )
     )
-    
+
     if (
         game_date_with_year < season_start
     ) {
