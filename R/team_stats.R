@@ -30,7 +30,7 @@ team_stats <- function(
         game_type = game_type
       ) %>%
         mutate(
-          sign = DescTools::Zodiac(as.Date(dob))
+          sign = ""
         )
 
         all_teams <- rbind(all_teams, df_team)

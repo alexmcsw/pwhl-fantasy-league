@@ -217,7 +217,9 @@ pwhl_teams <- function(
           "team_logo" = c(team_info[[i]]$logo)
         )
 
-        t <- data.frame(
+        if (
+          season_id >= 7
+        ) {
           team_code = c(
             "BOS",
             "MIN",
@@ -227,7 +229,8 @@ pwhl_teams <- function(
             "SEA",
             "VAN",
             "TOR"
-          ),
+          )
+
           team_label = c(
             "Boston",
             "Minnesota",
@@ -238,6 +241,29 @@ pwhl_teams <- function(
             "Vancouver",
             "Toronto"
           )
+        } else {
+          team_code = c(
+            "BOS",
+            "MIN",
+            "MTL",
+            "NY",
+            "OTT",
+            "TOR"
+          )
+
+          team_label = c(
+            "Boston",
+            "Minnesota",
+            "Montreal",
+            "New York",
+            "Ottawa",
+            "Toronto"
+          )
+        }
+
+        t <- data.frame(
+          team_code = team_code,
+          team_label = team_label
         )
 
         teams <- rbind(
@@ -267,6 +293,11 @@ pwhl_teams <- function(
     },
     warning = function(w) {},
     finally = {}
+  )
+
+  teams <- teams |>
+  filter(
+    team_name != "TBD"
   )
 
   return(teams)
@@ -322,7 +353,8 @@ pwhl_team_roster <- function(
     httr::content(as = "text", encoding = "utf-8")
 
   res <- gsub("angular.callbacks._h\\(", "", res)
-  res <- gsub("}}]}]}]})", "}}]}]}]}", res)
+  # res <- gsub("}}]}]}]})", "}}]}]}]}", res)
+  res <- gsub("]}]}]})", "]}]}]}", res)
 
   r <- res %>%
     jsonlite::parse_json()
