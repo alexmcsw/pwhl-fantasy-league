@@ -167,8 +167,18 @@ pwhl_stats_fix <- function(
 #'   try(pwhl_teams())
 #' }
 
-pwhl_teams <- function() {
-  full_url = "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=teamsForSeason&season=2&key=694cfeed58c932ee&client_code=pwhl&site_id=2&callback=angular.callbacks._4"
+pwhl_teams <- function(
+  season,
+  game_type = "preseason"
+) {
+  seasons <- pwhl_season_id() %>%
+    dplyr::filter(season_yr == season, game_type_label == game_type)
+
+  season_id <- seasons$season_id
+
+  full_url = glue::glue(
+    "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=teamsForSeason&season={season_id}&key=694cfeed58c932ee&client_code=pwhl&site_id=2&callback=angular.callbacks._4"
+  )
 
   res <- httr::RETRY(
     "GET",
@@ -200,15 +210,15 @@ pwhl_teams <- function() {
         )
 
         t <- data.frame(
-          team_name = c(
-            "PWHL Boston",
-            "PWHL Minnesota",
-            "PWHL Montreal",
-            "PWHL New York",
-            "PWHL Ottawa",
-            "PWHL Toronto",
-            "PWHL Seattle",
-            "PWHL Vancouver"
+          team_code = c(
+            "BOS",
+            "MIN",
+            "MTL",
+            "NY",
+            "OTT",
+            "SEA",
+            "VAN",
+            "TOR"
           ),
           team_label = c(
             "Boston",
@@ -216,16 +226,16 @@ pwhl_teams <- function() {
             "Montreal",
             "New York",
             "Ottawa",
-            "Toronto",
             "Seattle",
-            "Vancouver"
+            "Vancouver",
+            "Toronto"
           )
         )
 
         teams <- rbind(
           teams,
           team_df %>%
-            dplyr::left_join(t, by = c("team_name"))
+            dplyr::left_join(t, by = c("team_code"))
         )
 
         teams <- teams %>%

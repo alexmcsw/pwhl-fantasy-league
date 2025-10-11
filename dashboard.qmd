@@ -32,31 +32,6 @@ preseason_end <- "2025-11-17"
 regular_start <- "2025-11-21"
 regular_end <- "2026-04-25"
 
-team_logo_urls <- c(
-    "https://upload.wikimedia.org/wikipedia/en/b/bc/BostonFleet.png",
-    "https://upload.wikimedia.org/wikipedia/en/a/ae/MinnesotaFrost.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/9/93/Montreal_Victoire_Logo.svg/800px-Montreal_Victoire_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/New_York_Sirens_Logo.svg/1024px-New_York_Sirens_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Ottawa_Charge_Logo.svg/1280px-Ottawa_Charge_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Toronto_Sceptres.svg/800px-Toronto_Sceptres.svg.png"
-    # "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/PWHL_Seattle_Logo.webp/800px-PWHL_Seattle_Logo.webp.png",
-    # "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/VAN_PWHL.webp/400px-VAN_PWHL.webp.png"
-)
-
-names(team_logo_urls) <- pwhl_teams()$team_label |>
-recode(
-    "Montreal"="Montréal"
-)
-
-team_codes <- pwhl_teams()$team_code
-
-names(team_codes) <- pwhl_teams()$team_label |>
-recode(
-    "Montreal"="Montréal"
-)
-
-all_teams <- team_stats(season)
-
 if (
     ymd(current_date) <= ymd(preseason_end)
 ) {
@@ -71,6 +46,36 @@ if (
     game_type = "playoffs"
     season_start = playoffs_start
 }
+
+teams <- pwhl_teams(
+    season = season,
+    game_type = game_type
+)
+
+team_logo_urls <- c(
+    "https://upload.wikimedia.org/wikipedia/en/b/bc/BostonFleet.png",
+    "https://upload.wikimedia.org/wikipedia/en/a/ae/MinnesotaFrost.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/9/93/Montreal_Victoire_Logo.svg/800px-Montreal_Victoire_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/New_York_Sirens_Logo.svg/1024px-New_York_Sirens_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Ottawa_Charge_Logo.svg/1280px-Ottawa_Charge_Logo.svg.png",
+    "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Toronto_Sceptres.svg/800px-Toronto_Sceptres.svg.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/PWHL_Seattle_Logo.webp/800px-PWHL_Seattle_Logo.webp.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/VAN_PWHL.webp/400px-VAN_PWHL.webp.png"
+)
+
+names(team_logo_urls) <- teams$team_label |>
+recode(
+    "Montreal"="Montréal"
+)
+
+team_codes <- teams$team_code
+
+names(team_codes) <- teams$team_label |>
+recode(
+    "Montreal"="Montréal"
+)
+
+all_teams <- team_stats(season)
 
 schedule <- pwhl_schedule(
     season = season,
