@@ -5,7 +5,8 @@ parse_schedule_year <- function(
 
     game_date_with_year <- ymd(
         paste0(
-            "2024 ",
+            year(season_start),
+            " ",
             game_date
         )
     )
