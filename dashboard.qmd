@@ -75,7 +75,11 @@ recode(
     "Montreal"="Montréal"
 )
 
-all_teams <- team_stats(season)
+all_teams <- team_stats(
+    season = season,
+    teams = teams,
+    game_type = game_type
+)
 
 schedule <- pwhl_schedule(
     season = season,
@@ -417,62 +421,123 @@ if (
 
 ```{r}
 
+team_name <- "Noah"
+
 html(
     web_image(
-        url = team_images["Noah"],
+        url = team_images[team_name],
         height = "50px"
     )
 )
 
-team_rosters$Noah |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
-)
+if (
+    "player_headshot" %in% colnames(
+        team_rosters[[team_name]]
+    )
+) {
+    team_rosters[[team_name]] |> gt() |> text_transform(
+        locations = cells_body(columns = player_headshot),
+        fn = function(x) {
+            web_image(
+                url = x,
+                height = "50px"
+            )
+        }
+    )
+} else {
+    team_rosters[[team_name]] |> gt()
+}
 ```
 
 ### Alex
 
 ```{r}
-team_rosters$Alex |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
+team_name <- "Alex"
+
+html(
+    web_image(
+        url = team_images[team_name],
+        height = "50px"
+    )
 )
+
+if (
+    "player_headshot" %in% colnames(
+        team_rosters[[team_name]]
+    )
+) {
+    team_rosters[[team_name]] |> gt() |> text_transform(
+        locations = cells_body(columns = player_headshot),
+        fn = function(x) {
+            web_image(
+                url = x,
+                height = "50px"
+            )
+        }
+    )
+} else {
+    team_rosters[[team_name]] |> gt()
+}
 ```
 
 ### Rambouillet
 
 ```{r}
-team_rosters$Rambouillet |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
+team_name <- "Rambouillet"
+
+html(
+    web_image(
+        url = team_images[team_name],
+        height = "50px"
+    )
 )
+
+if (
+    "player_headshot" %in% colnames(
+        team_rosters[[team_name]]
+    )
+) {
+    team_rosters[[team_name]] |> gt() |> text_transform(
+        locations = cells_body(columns = player_headshot),
+        fn = function(x) {
+            web_image(
+                url = x,
+                height = "50px"
+            )
+        }
+    )
+} else {
+    team_rosters[[team_name]] |> gt()
+}
 ```
 
 ### Meadow
 
 ```{r}
-team_rosters$Meadow |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
+team_name <- "Meadow"
+
+html(
+    web_image(
+        url = team_images[team_name],
+        height = "50px"
+    )
 )
+
+if (
+    "player_headshot" %in% colnames(
+        team_rosters[[team_name]]
+    )
+) {
+    team_rosters[[team_name]] |> gt() |> text_transform(
+        locations = cells_body(columns = player_headshot),
+        fn = function(x) {
+            web_image(
+                url = x,
+                height = "50px"
+            )
+        }
+    )
+} else {
+    team_rosters[[team_name]] |> gt()
+}
 ```

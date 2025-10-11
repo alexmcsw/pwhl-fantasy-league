@@ -15,19 +15,19 @@
 
 pwhl_stats_fix <- function(
   position = "goalie",
-  team = "BOS",
+  team_label_arg = "Boston",
+  teams = NULL,
   season = 2023,
-  regular = TRUE
+  game_type = "preseason"
 ) {
-  team_id <- pwhl_teams() %>%
-    dplyr::filter(.data$team_label == team) %>%
+  team_id <- teams %>%
+    dplyr::filter(.data$team_label == team_label_arg) %>%
     dplyr::select(team_id)
 
-  if (regular) {
-    season_id <- 1
-  } else if (!regular) {
-    season_id <- 2
-  }
+  seasons <- pwhl_season_id() %>%
+    dplyr::filter(season_yr == season, game_type_label == game_type)
+
+  season_id <- seasons$season_id
 
   tryCatch(
     expr = {
@@ -282,16 +282,20 @@ pwhl_teams <- function(
 #'   try(pwhl_team_roster(season = 2023, team = "Toronto"))
 #' }
 
-pwhl_team_roster <- function(team, season, regular = TRUE) {
-  # team_id <- 1 # will need the team/season look ups
-  team_id <- pwhl_teams() %>%
-    dplyr::filter(.data$team_label == team)
-  # season_id <- 2 # 1 is regular season, 2 is pre-season
-  if (regular) {
-    season_id <- 1
-  } else if (!regular) {
-    season_id <- 2
-  }
+pwhl_team_roster <- function(
+  team_label_arg,
+  season,
+  game_type
+) {
+  team_id <- teams %>%
+    dplyr::filter(.data$team_label == team_label_arg) %>%
+    dplyr::select(team_id)
+
+  seasons <- pwhl_season_id() %>%
+    dplyr::filter(season_yr == season, game_type_label == game_type)
+
+  season_id <- seasons$season_id
+
   # base_url <- "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=roster&team_id=1&season_id=2&key=694cfeed58c932ee&client_code=pwhl&site_id=8&league_id=1&lang=en&callback=angular.callbacks._h"
   full_url <- paste0(
     "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=roster&team_id=",
