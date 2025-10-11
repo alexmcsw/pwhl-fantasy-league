@@ -26,7 +26,7 @@ invisible(
 season_dates_and_type <- get_season_dates_and_type()
 
 current_date = today()
-current_date = "2024-05-07"
+current_date = "2024-11-21"
 
 season_row_idx_for_current_date <- season_dates_and_type |>
 (\(x) x$start_date < current_date & x$end_date >= current_date)() |>
@@ -154,9 +154,16 @@ schedule <- pwhl_schedule(
     season_id = season_id
 )
 
-schedule$home_team_logo <- team_logo_urls[
+schedule$home_team_code <- team_codes[
     match(
         schedule$home_team,
+        names(team_codes)
+    )
+]
+
+schedule$home_team_logo <- team_logo_urls[
+    match(
+        schedule$home_team_code,
         names(team_logo_urls)
     )
 ]
@@ -168,17 +175,17 @@ schedule$home_team_code <- team_codes[
     )
 ]
 
-schedule$away_team_logo <- team_logo_urls[
-    match(
-        schedule$away_team,
-        names(team_logo_urls)
-    )
-]
-
 schedule$away_team_code <- team_codes[
     match(
         schedule$away_team,
         names(team_codes)
+    )
+]
+
+schedule$away_team_logo <- team_logo_urls[
+    match(
+        schedule$away_team_code,
+        names(team_logo_urls)
     )
 ]
 
