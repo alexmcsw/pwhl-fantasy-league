@@ -573,10 +573,39 @@ pwhl_schedule <- function(season, game_type = "regular") {
 pwhl_season_id <- function(season, game_type = "regular") {
 
   season_id <- data.frame(
-    "season_yr" = c(2024, 2024, 2024, 2025, 2025, 2025),
-    "game_type_label" = c("preseason", "regular", "playoffs",
-                    "preseason", "regular", "playoffs"),
-    "season_id" = c(2, 1, 3, 4, 5, 6)
+    "season_yr" = c(
+      2024,
+      2024,
+      2024,
+      2025,
+      2025,
+      2025,
+      2026,
+      2026,
+      2026
+    ),
+    "game_type_label" = c(
+      "preseason",
+      "regular",
+      "playoffs",
+      "preseason",
+      "regular",
+      "playoffs",
+      "preseason",
+      "regular",
+      "playoffs"
+    ),
+    "season_id" = c(
+      2,
+      1,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    )
   )
 
   return(season_id)
