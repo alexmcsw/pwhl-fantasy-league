@@ -1,6 +1,7 @@
 get_roster_points_per_game <- function(
     team_rosters,
-    player_boxes_per_game
+    player_boxes_per_game,
+    schedule
 ) {
 
     if (
@@ -14,9 +15,10 @@ get_roster_points_per_game <- function(
                 matrix(
                     ncol = length(
                         team_rosters
-                    ),
+                    ) + 1,
                     nrow = 0,
                     dimnames = list(
+                        NULL,
                         NULL,
                         names(
                             team_rosters
@@ -35,6 +37,17 @@ get_roster_points_per_game <- function(
             ) |> bind_rows() |> mutate(
                 game_id = names(
                     player_boxes_per_game
+                ) |> as.numeric()
+            ) |> merge(
+                schedule,
+                by = "game_id"
+            ) |> select(
+                c(
+                    game_id,
+                    game_date,
+                    names(
+                        team_rosters
+                    )
                 )
             ) |> column_to_rownames(
                 "game_id"

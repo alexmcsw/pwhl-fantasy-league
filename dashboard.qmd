@@ -26,7 +26,7 @@ invisible(
 season_dates_and_type <- get_season_dates_and_type()
 
 current_date = today()
-current_date = "2024-11-21"
+current_date = "2024-11-22"
 
 season_row_idx_for_current_date <- season_dates_and_type |>
 (\(x) x$start_date < current_date & x$end_date >= current_date)() |>
@@ -243,7 +243,8 @@ team_rosters <- rosters_idx |> map(
 
 roster_points_per_game <- get_roster_points_per_game(
     team_rosters,
-    player_boxes_per_game
+    player_boxes_per_game,
+    schedule
 )
 
 standings <- compute_standings(
@@ -417,7 +418,26 @@ if (
 ```{r "standings overview"}
 #| title: "Standings"
 standings |>
-select(
+mutate(
+    delta = roster_points_per_game |>
+    filter(
+        game_date == last_game_day_date
+    ) |>
+    compute_standings(
+        team_images
+    ) |>
+    pull(
+        Points
+    )
+) |>
+mutate(
+    Points = paste0(
+            Points,
+            " (+",
+            delta,
+            ")"
+        )
+) |> select(
     c(
         Team,
         Points

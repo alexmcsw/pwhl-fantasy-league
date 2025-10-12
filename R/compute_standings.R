@@ -5,7 +5,7 @@ compute_standings <- function(
     standings <- roster_points_per_game |>
     summarise(
         across(
-            everything(),
+            -game_date,
             ~ sum(
                 .,
                 na.rm = TRUE
@@ -45,4 +45,6 @@ compute_standings <- function(
             "Points"
         )
     )
+
+    return(standings)
 }
