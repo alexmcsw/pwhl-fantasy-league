@@ -1,3 +1,5 @@
+library(magrittr)
+
 #' @title  **PWHL Schedule**
 #' @description PWHL Schedule lookup
 #'

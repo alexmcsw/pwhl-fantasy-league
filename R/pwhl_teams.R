@@ -1,3 +1,5 @@
+library(magrittr)
+
 #' @title  **PWHL Teams**
 #' @description PWHL Teams lookup
 #'

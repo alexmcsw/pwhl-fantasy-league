@@ -1,3 +1,5 @@
+library(readr)
+
 get_google_sheet <- function(
   url = 'https://docs.google.com/spreadsheets/d/1sywjZ6quCmbLBq_wEEXZEDzcW0NeBpCtRaT3W1hDkhI',
   format = 'csv',

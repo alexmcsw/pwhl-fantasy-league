@@ -1,3 +1,5 @@
+library(magrittr)
+
 #' @title  **PWHL Player Game Box Scores**
 #' @description PWHL Player Box Scores
 #'

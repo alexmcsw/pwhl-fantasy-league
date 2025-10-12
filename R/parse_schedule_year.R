@@ -1,3 +1,5 @@
+library(lubridate)
+
 parse_schedule_year <- function(
     game_date,
     season_start

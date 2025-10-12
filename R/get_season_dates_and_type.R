@@ -1,3 +1,9 @@
+library(dplyr)
+library(purrr)
+library(stringr)
+library(lubridate)
+library(magrittr)
+
 get_season_dates_and_type <- function() {
     df <- pwhl_season_id()
 

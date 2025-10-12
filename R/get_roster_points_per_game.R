@@ -1,3 +1,7 @@
+library(dplyr)
+library(purrr)
+library(tibble)
+
 get_roster_points_per_game <- function(
     team_rosters,
     player_boxes_per_game,

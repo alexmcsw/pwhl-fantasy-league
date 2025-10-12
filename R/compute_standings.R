@@ -1,3 +1,6 @@
+library(dplyr)
+library(magrittr)
+
 compute_standings <- function(
     roster_points_per_game,
     team_images

@@ -1,6 +1,6 @@
-# create a nice function to lapply to our team vector
+library(magrittr)
+library(dplyr)
 
-# get data
 team_stats <- function(
   season,
   teams,
