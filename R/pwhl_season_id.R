@@ -13,7 +13,6 @@
 #' }
 
 pwhl_season_id <- function(season, game_type = "regular") {
-
   season_id <- data.frame(
     "season_yr" = c(
       2024,
@@ -51,5 +50,4 @@ pwhl_season_id <- function(season, game_type = "regular") {
   )
 
   return(season_id)
-
 }

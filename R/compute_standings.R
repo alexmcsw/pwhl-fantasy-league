@@ -3,48 +3,50 @@ compute_standings <- function(
     team_images
 ) {
     standings <- roster_points_per_game |>
-    summarise(
-        across(
-            -game_date,
-            ~ sum(
-                .,
-                na.rm = TRUE
+        summarise(
+            across(
+                -game_date,
+                ~ sum(
+                    .,
+                    na.rm = TRUE
+                )
             )
         )
-    )
 
     standings <- standings[
         order(
             unlist(
                 standings
             ),
-            decreasing=TRUE
+            decreasing = TRUE
         )
     ] |>
-    stack() |>
-    set_names(
-        c(
-            "points",
-            "team_name"
+        stack() |>
+        set_names(
+            c(
+                "points",
+                "team_name"
+            )
         )
-    )
 
-    standings <- standings |> mutate(
-        Team = recode(
-            team_name,
-            !!!team_images
+    standings <- standings |>
+        mutate(
+            Team = recode(
+                team_name,
+                !!!team_images
+            )
+        ) |>
+        rename(
+            Name = team_name,
+            Points = points
+        ) |>
+        select(
+            c(
+                "Name",
+                "Team",
+                "Points"
+            )
         )
-    ) |>
-    rename(
-        Name = team_name,
-        Points = points
-    ) |> select(
-        c(
-            "Name",
-            "Team",
-            "Points"
-        )
-    )
 
     return(standings)
 }

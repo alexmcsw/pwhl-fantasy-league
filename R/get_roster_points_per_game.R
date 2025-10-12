@@ -3,19 +3,19 @@ get_roster_points_per_game <- function(
     player_boxes_per_game,
     schedule
 ) {
-
     if (
         length(
             player_boxes_per_game
-        ) == 0
+        ) ==
+            0
     ) {
-
         return(
             roster_points_per_game <- data.frame(
                 matrix(
                     ncol = length(
                         team_rosters
-                    ) + 1,
+                    ) +
+                        1,
                     nrow = 0,
                     dimnames = list(
                         NULL,
@@ -27,31 +27,36 @@ get_roster_points_per_game <- function(
                 )
             )
         )
-
     } else {
-
         return(
-            player_boxes_per_game |> map(
-                get_roster_points_from_game,
-                team_rosters = team_rosters
-            ) |> bind_rows() |> mutate(
-                game_id = names(
-                    player_boxes_per_game
-                ) |> as.numeric()
-            ) |> merge(
-                schedule,
-                by = "game_id"
-            ) |> select(
-                c(
-                    game_id,
-                    game_date,
-                    names(
-                        team_rosters
+            player_boxes_per_game |>
+                map(
+                    get_roster_points_from_game,
+                    team_rosters = team_rosters
+                ) |>
+                bind_rows() |>
+                mutate(
+                    game_id = names(
+                        player_boxes_per_game
+                    ) |>
+                        as.numeric()
+                ) |>
+                merge(
+                    schedule,
+                    by = "game_id"
+                ) |>
+                select(
+                    c(
+                        game_id,
+                        game_date,
+                        names(
+                            team_rosters
+                        )
                     )
+                ) |>
+                column_to_rownames(
+                    "game_id"
                 )
-            ) |> column_to_rownames(
-                "game_id"
-            )
         )
     }
 }

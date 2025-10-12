@@ -17,7 +17,6 @@ pwhl_teams <- function(
   game_type = "preseason",
   season_id = NULL
 ) {
-
   if (
     is.null(
       season_id
@@ -62,9 +61,7 @@ pwhl_teams <- function(
           "team_logo" = c(team_info[[i]]$logo)
         )
 
-        if (
-          season_id >= 7
-        ) {
+        if (season_id >= 7) {
           team_code = c(
             "BOS",
             "MIN",
@@ -141,9 +138,9 @@ pwhl_teams <- function(
   )
 
   teams <- teams |>
-  filter(
-    team_name != "TBD"
-  )
+    filter(
+      team_name != "TBD"
+    )
 
   return(teams)
 }

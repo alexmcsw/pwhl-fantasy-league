@@ -6,7 +6,6 @@ team_stats <- function(
   teams,
   game_type
 ) {
-
   all_teams <- data.frame()
 
   for (team_label in teams$team_label) {
@@ -22,7 +21,8 @@ team_stats <- function(
     if (
       nrow(
         df_stats
-      ) == 0
+      ) ==
+        0
     ) {
       df_team <- pwhl_team_roster(
         team_label_arg = team_label,
@@ -33,7 +33,7 @@ team_stats <- function(
           sign = ""
         )
 
-        all_teams <- rbind(all_teams, df_team)
+      all_teams <- rbind(all_teams, df_team)
     } else {
       df_team <- pwhl_team_roster(
         team_label_arg = team_label,
@@ -48,7 +48,7 @@ team_stats <- function(
           by = c("player_id")
         )
 
-         all_teams <- rbind(all_teams, df_team) |>
+      all_teams <- rbind(all_teams, df_team) |>
         filter(current_team == 1)
     }
   }

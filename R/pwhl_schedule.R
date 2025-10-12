@@ -13,8 +13,11 @@
 #'   try(pwhl_schedule(season = 2023))
 #' }
 
-pwhl_schedule <- function(season = 2023, game_type = "regular", season_id = NULL) {
-
+pwhl_schedule <- function(
+  season = 2023,
+  game_type = "regular",
+  season_id = NULL
+) {
   if (
     is.null(
       season_id
@@ -54,9 +57,8 @@ pwhl_schedule <- function(season = 2023, game_type = "regular", season_id = NULL
   tryCatch(
     expr = {
       for (i in 1:length(gm)) {
-
         if (is.null(gm[[i]]$prop$venue_name$venueUrl)) {
-          venue <-'TBD'
+          venue <- 'TBD'
         } else {
           venue <- gm[[i]]$prop$venue_name$venueUrl
         }
@@ -80,7 +82,6 @@ pwhl_schedule <- function(season = 2023, game_type = "regular", season_id = NULL
           schedule_data,
           game_info
         )
-
       }
 
       schedule_data <- schedule_data %>%
@@ -89,38 +90,37 @@ pwhl_schedule <- function(season = 2023, game_type = "regular", season_id = NULL
             .data$home_score == '' | .data$away_score == "-" ~ '-',
             .data$home_score > .data$away_score ~ .data$home_team,
             .data$away_score > .data$home_score ~ .data$away_team,
-            .data$home_score == .data$away_score & .data$home_score != "-" ~ "Tie",
+            .data$home_score == .data$away_score & .data$home_score != "-" ~
+              "Tie",
             TRUE ~ NA_character_
           ),
           season = season
         ) %>%
         dplyr::select(
           c(
-              "game_id",
-              "game_date",
-              "game_status",
-              "home_team",
-              "home_team_id",
-              "away_team",
-              "away_team_id",
-              "home_score",
-              "away_score",
-              "winner",
-              "venue",
-              "venue_url"
-            )
+            "game_id",
+            "game_date",
+            "game_status",
+            "home_team",
+            "home_team_id",
+            "away_team",
+            "away_team_id",
+            "home_score",
+            "away_score",
+            "winner",
+            "venue",
+            "venue_url"
+          )
         )
     },
     error = function(e) {
-      message(glue::glue("{Sys.time()}: Invalid season or no schedule data available! Try a season from 2023 onwards!"))
-
+      message(glue::glue(
+        "{Sys.time()}: Invalid season or no schedule data available! Try a season from 2023 onwards!"
+      ))
     },
-    warning = function(w) {
-    },
-    finally = {
-    }
+    warning = function(w) {},
+    finally = {}
   )
 
   return(schedule_data)
-
 }
