@@ -1,5 +1,16 @@
-library(magrittr)
 library(dplyr)
+library(magrittr)
+
+#' @title  **Get PWHL Team Stats**
+#' @description Get stats of all players in the PWHL
+#'
+#' @param season Current season
+#' @teams data.frame of PWHL teams
+#' @param game_type Game type
+#' @return data.frame of player stats
+#' @import dplyr
+#' @import magrittr
+#' @export
 
 team_stats <- function(
   season,

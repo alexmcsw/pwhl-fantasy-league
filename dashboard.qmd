@@ -218,7 +218,7 @@ for (game_id in schedule_to_date$game_id) {
 }
 
 rosters_idx_gsheet <- get_google_sheet(
-    sheetId = 0
+    sheet_id = 0
 )
 
 team_images <- rosters_idx_gsheet$team_image |>
