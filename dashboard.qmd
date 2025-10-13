@@ -22,132 +22,45 @@ invisible(
 )
 ```
 
-```{r "read API data"}
+```{r "Get season dates and type"}
 season_dates_and_type <- get_season_dates_and_type()
 
 current_date = today()
 current_date = "2024-11-22"
 
-season_row_idx_for_current_date <- season_dates_and_type |>
-(\(x) x$start_date < current_date & x$end_date >= current_date)() |>
-which()
+days_for_current_date <- get_days_for_current_date(
+  current_date,
+  season_dates_and_type
+)
 
-last_game_day_date <- "tbd"
-next_game_day_date <- "tbd"
-season_id <- season_dates_and_type[
-    season_row_idx_for_current_date,
-    "season_id"
-]
+last_game_day_date <- days_for_current_date["last_game_day_date"][[1]]
+next_game_day_date <- days_for_current_date["next_game_day_date"][[1]]
+season_id <- days_for_current_date["season_id"][[1]]
+season <- days_for_current_date["season"][[1]]
+game_type <- days_for_current_date["game_type"][[1]]
+```
 
-if (
-    length(
-        season_row_idx_for_current_date
-    )== 0
-) {
-    season_row_idx_for_current_date <- season_dates_and_type |>
-    (\(x) x$start_date >= current_date)() |>
-    which() |>
-    first()
+```{r "Get team data"}
 
-    if (
-        season_row_idx_for_current_date == 1
-    ) {
-        last_game_day_date <- NULL
-    } else {
-        last_game_day_date <- season_dates_and_type[
-            season_row_idx_for_current_date - 1,
-            "end_date"
-        ]
-    }
-
-    next_game_day_date <- season_dates_and_type[
-        season_row_idx_for_current_date,
-        "start_date"
-    ]
-
-    season_id <- season_dates_and_type[
-        season_row_idx_for_current_date,
-        "season_id"
-    ]
-}
-
-if (
-    is.na(
-        season_row_idx_for_current_date
-    )
-) {
-    season_row_idx_for_current_date <- rownames(
-        season_dates_and_type
-    ) |>
-    max()
-
-    last_game_day_date <- season_dates_and_type[
-        season_row_idx_for_current_date,
-        "end_date"
-    ]
-
-    next_game_day_date <- NULL
-    season_id <- NULL
-}
-
-if (
-    !is.null(
-        season_id
-    )
-) {
-    season = season_dates_and_type |>
-    filter(
-        season_id == .env$season_id
-    ) |>
-    select(
-        season_yr
-    ) |>
-    as.numeric()
-
-    game_type <- season_dates_and_type |>
-    filter(
-        season_id == .env$season_id
-    ) |>
-    select(
-        game_type_label
-    ) |>
-    as.character()
-}
+team_logo_urls <- get_team_logo_urls(
+    season_id
+)
 
 teams <- pwhl_teams(
-    season_id = season_id
+  season_id = season_id
 )
-
-team_logo_urls <- list(
-    BOS = "https://upload.wikimedia.org/wikipedia/en/b/bc/BostonFleet.png",
-    MIN = "https://upload.wikimedia.org/wikipedia/en/a/ae/MinnesotaFrost.png",
-    MTL = "https://upload.wikimedia.org/wikipedia/en/thumb/9/93/Montreal_Victoire_Logo.svg/800px-Montreal_Victoire_Logo.svg.png",
-    NY = "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/New_York_Sirens_Logo.svg/1024px-New_York_Sirens_Logo.svg.png",
-    OTT = "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Ottawa_Charge_Logo.svg/1280px-Ottawa_Charge_Logo.svg.png",
-    TOR = "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Toronto_Sceptres.svg/800px-Toronto_Sceptres.svg.png"
-)
-
-if (
-    season_id >= 7
-) {
-    team_logo_urls <- c(
-        team_logo_urls,
-        SEA = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/PWHL_Seattle_Logo.webp/800px-PWHL_Seattle_Logo.webp.png",
-        VAN = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/VAN_PWHL.webp/400px-VAN_PWHL.webp.png"
-    )
-}
 
 team_codes <- teams$team_code
 
 names(team_codes) <- teams$team_label |>
-recode(
-    "Montreal"="Montréal"
-)
+ recode(
+     "Montreal" = "Montréal"
+ )
 
 all_teams <- team_stats(
-    season = season,
-    teams = teams,
-    game_type = game_type
+  season = season,
+  teams = teams,
+  game_type = game_type
 )
 
 schedule <- pwhl_schedule(
