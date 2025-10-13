@@ -1,12 +1,13 @@
 library(dplyr)
 
-#' @title  **Get all PWHL player info and stats**
-#' @description Get all PWHL player info and stats
+#' @title  **Get all PWHL team/player data**
+#' @description Get all PWHL player team/player data, including team logo URLS,
+#' team rosters with stats and team codes
 #'
 #' @param season_id Current season ID
 #' @param season Current season
 #' @param game_type Current season game type
-#' @return data.frame of PWHL player info and stats
+#' @return data.frames of PWHL team/player data
 #' @import dplyr
 #' @export
 #' #' #' @examples
@@ -19,6 +20,10 @@ get_all_teams <- function(
   season,
   game_type
 ) {
+  team_logo_urls <- get_team_logo_urls(
+    season_id
+  )
+
   teams <- pwhl_teams(
     season_id = season_id
   )
@@ -34,5 +39,14 @@ get_all_teams <- function(
     season = season,
     teams = teams,
     game_type = game_type
+  )
+
+  return(
+    list(
+      team_logo_urls = team_logo_urls,
+      teams = teams,
+      team_codes = team_codes,
+      all_teams = all_teams
+    )
   )
 }

@@ -36,6 +36,7 @@ team_stats <- function(
         0
     ) {
       df_team <- pwhl_team_roster(
+        teams = teams,
         team_label_arg = team_label,
         season = season,
         game_type = game_type
@@ -47,6 +48,7 @@ team_stats <- function(
       all_teams <- rbind(all_teams, df_team)
     } else {
       df_team <- pwhl_team_roster(
+        teams = teams,
         team_label_arg = team_label,
         season = season,
         game_type = game_type

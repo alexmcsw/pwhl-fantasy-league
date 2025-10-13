@@ -9,6 +9,7 @@ library(lubridate)
 #' @title  **PWHL Rosters**
 #' @description PWHL Rosters lookup
 #'
+#' @param teams data.frame of PWHL teams
 #' @param season Season (YYYY) to pull the roster from, the concluding year in XXXX-YY format
 #' @param team Team to pull the roster data for
 #' @param regular Bool for whether to pull regular or pre-season rosters
@@ -27,6 +28,7 @@ library(lubridate)
 #' }
 
 pwhl_team_roster <- function(
+  teams,
   team_label_arg,
   season,
   game_type

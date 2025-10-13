@@ -23,97 +23,46 @@ invisible(
 ```
 
 ```{r "Get season dates and type"}
-season_dates_and_type <- get_season_dates_and_type()
-
 current_date = today()
 current_date = "2024-11-22"
+
+season_dates_and_type <- get_season_dates_and_type()
 
 days_for_current_date <- get_days_for_current_date(
   current_date,
   season_dates_and_type
 )
 
-last_game_day_date <- days_for_current_date["last_game_day_date"][[1]]
-next_game_day_date <- days_for_current_date["next_game_day_date"][[1]]
-season_id <- days_for_current_date["season_id"][[1]]
-season <- days_for_current_date["season"][[1]]
-game_type <- days_for_current_date["game_type"][[1]]
+last_game_day_date <- days_for_current_date$last_game_day_date |>
+ as.character()
+next_game_day_date <- days_for_current_date$next_game_day_date |>
+ as.character()
+season_id <- days_for_current_date$season_id |>
+ as.numeric()
+season <- days_for_current_date$season |>
+ as.numeric()
+game_type <- days_for_current_date$game_type |>
+ as.character()
 ```
 
-```{r "Get team data"}
+```{r "Get team and schedule data"}
 
-team_logo_urls <- get_team_logo_urls(
-    season_id
+team_data_frames <- get_all_teams(
+  season_id,
+  season,
+  game_type
 )
 
-teams <- pwhl_teams(
-  season_id = season_id
-)
+team_logo_urls <- team_data_frames["team_logo_urls"][[1]]
+teams <- team_data_frames["teams"][[1]]
+team_codes <- team_data_frames["team_codes"][[1]]
+all_teams <- team_data_frames["all_teams"][[1]]
 
-team_codes <- teams$team_code
-
-names(team_codes) <- teams$team_label |>
- recode(
-     "Montreal" = "Montréal"
- )
-
-all_teams <- team_stats(
-  season = season,
-  teams = teams,
-  game_type = game_type
-)
-
-schedule <- pwhl_schedule(
-    season_id = season_id
-)
-
-schedule$home_team_code <- team_codes[
-    match(
-        schedule$home_team,
-        names(team_codes)
-    )
-]
-
-schedule$home_team_logo <- team_logo_urls[
-    match(
-        schedule$home_team_code,
-        names(team_logo_urls)
-    )
-]
-
-schedule$home_team_code <- team_codes[
-    match(
-        schedule$home_team,
-        names(team_codes)
-    )
-]
-
-schedule$away_team_code <- team_codes[
-    match(
-        schedule$away_team,
-        names(team_codes)
-    )
-]
-
-schedule$away_team_logo <- team_logo_urls[
-    match(
-        schedule$away_team_code,
-        names(team_logo_urls)
-    )
-]
-
-schedule$game_date <- schedule$game_date |>
-str_split_i(
-    pattern=",",
-    i=-1
-) |>
-trimws() |>
-map(
-    parse_schedule_year,
-    season_start=season_dates_and_type[
-        season_id,
-        "start_date"
-    ]
+schedule <- get_schedule(
+  season_id,
+  team_codes,
+  team_logo_urls,
+  season_dates_and_type
 )
 
 schedule_to_date <- schedule |>

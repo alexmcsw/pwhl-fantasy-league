@@ -102,7 +102,7 @@ get_days_for_current_date <- function(
   }
 
   return(
-    list(
+    data.frame(
       last_game_day_date = last_game_day_date,
       next_game_day_date = next_game_day_date,
       season_id = season_id,
