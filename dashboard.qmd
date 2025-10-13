@@ -464,7 +464,13 @@ if (
         team_rosters[[team_name]]
     )
 ) {
-    team_rosters[[team_name]] |> gt() |> text_transform(
+    team_rosters[[team_name]] |>
+    relocate(
+        player_headshot,
+        .before = player_id
+    ) |>
+    gt() |>
+    text_transform(
         locations = cells_body(columns = player_headshot),
         fn = function(x) {
             web_image(
@@ -474,7 +480,8 @@ if (
         }
     )
 } else {
-    team_rosters[[team_name]] |> gt()
+    team_rosters[[team_name]] |>
+    gt()
 }
 ```
 
@@ -495,7 +502,13 @@ if (
         team_rosters[[team_name]]
     )
 ) {
-    team_rosters[[team_name]] |> gt() |> text_transform(
+    team_rosters[[team_name]] |>
+    relocate(
+        player_headshot,
+        .before = player_id
+    ) |>
+    gt() |>
+    text_transform(
         locations = cells_body(columns = player_headshot),
         fn = function(x) {
             web_image(
@@ -505,7 +518,8 @@ if (
         }
     )
 } else {
-    team_rosters[[team_name]] |> gt()
+    team_rosters[[team_name]] |>
+    gt()
 }
 ```
 
@@ -526,7 +540,13 @@ if (
         team_rosters[[team_name]]
     )
 ) {
-    team_rosters[[team_name]] |> gt() |> text_transform(
+    team_rosters[[team_name]] |>
+    relocate(
+        player_headshot,
+        .before = player_id
+    ) |>
+    gt() |>
+    text_transform(
         locations = cells_body(columns = player_headshot),
         fn = function(x) {
             web_image(
@@ -536,7 +556,8 @@ if (
         }
     )
 } else {
-    team_rosters[[team_name]] |> gt()
+    team_rosters[[team_name]] |>
+    gt()
 }
 ```
 
@@ -557,7 +578,13 @@ if (
         team_rosters[[team_name]]
     )
 ) {
-    team_rosters[[team_name]] |> gt() |> text_transform(
+    team_rosters[[team_name]] |>
+    relocate(
+        player_headshot,
+        .before = player_id
+    ) |>
+    gt() |>
+    text_transform(
         locations = cells_body(columns = player_headshot),
         fn = function(x) {
             web_image(
@@ -567,6 +594,7 @@ if (
         }
     )
 } else {
-    team_rosters[[team_name]] |> gt()
+    team_rosters[[team_name]] |>
+    gt()
 }
 ```

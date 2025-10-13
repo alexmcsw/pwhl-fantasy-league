@@ -1,4 +1,10 @@
 library(magrittr)
+library(dplyr)
+library(httr)
+library(jsonlite)
+library(glue)
+library(tidyr)
+library(lubridate)
 
 #' @title  **PWHL Rosters**
 #' @description PWHL Rosters lookup
@@ -8,8 +14,11 @@ library(magrittr)
 #' @param regular Bool for whether to pull regular or pre-season rosters
 #' @return A data frame with roster data
 #' @import jsonlite
+#' @import tidyr
 #' @import dplyr
+#' @import magrittr
 #' @import httr
+#' @import lubridate
 #' @importFrom glue glue
 #' @export
 #' @examples
@@ -23,11 +32,18 @@ pwhl_team_roster <- function(
   game_type
 ) {
   team_id <- teams %>%
-    dplyr::filter(.data$team_label == team_label_arg) %>%
-    dplyr::select(team_id)
+    filter(
+      .data$team_label == team_label_arg
+    ) %>%
+    select(
+      team_id
+    )
 
   seasons <- pwhl_season_id() %>%
-    dplyr::filter(season_yr == season, game_type_label == game_type)
+    filter(
+      season_yr == season,
+      game_type_label == game_type
+    )
 
   season_id <- seasons$season_id
 
@@ -40,20 +56,31 @@ pwhl_team_roster <- function(
     "&key=694cfeed58c932ee&client_code=pwhl&site_id=8&league_id=1&lang=en&callback=angular.callbacks._h"
   )
 
-  res <- httr::RETRY(
+  res <- RETRY(
     "GET",
     full_url
   )
 
   res <- res %>%
-    httr::content(as = "text", encoding = "utf-8")
+    content(
+      as = "text",
+      encoding = "utf-8"
+    )
 
-  res <- gsub("angular.callbacks._h\\(", "", res)
+  res <- gsub(
+    "angular.callbacks._h\\(",
+    "",
+    res
+  )
   # res <- gsub("}}]}]}]})", "}}]}]}]}", res)
-  res <- gsub("]}]}]})", "]}]}]}", res)
+  res <- gsub(
+    "]}]}]})",
+    "]}]}]}",
+    res
+  )
 
   r <- res %>%
-    jsonlite::parse_json()
+    parse_json()
 
   team_name <- r[[1]]
   team_logo <- r[[2]]
@@ -132,7 +159,7 @@ pwhl_team_roster <- function(
                   }
                 )
               ) %>%
-                tidyr::separate(
+                separate(
                   player_name,
                   into = c("first_name", "last_name"),
                   remove = FALSE,
@@ -153,30 +180,46 @@ pwhl_team_roster <- function(
       }
 
       roster_data <- roster_data %>%
-        dplyr::mutate(
+        mutate(
           league = "pwhl",
-          age = round(lubridate::time_length(
-            as.Date(paste0(season, "-01-01")) - as.Date(.data$dob),
-            "years"
-          )),
+          age = round(
+            time_length(
+              as.Date(
+                paste0(
+                  season,
+                  "-01-01"
+                )
+              ) -
+                as.Date(
+                  .data$dob
+                ),
+              "years"
+            )
+          ),
           player_headshot = paste0(
             "https://assets.leaguestat.com/pwhl/240x240/",
             .data$player_id,
             ".jpg"
           ),
-          regular_season = ifelse(season_id == 1, TRUE, FALSE),
+          regular_season = ifelse(
+            season_id == 1,
+            TRUE,
+            FALSE
+          ),
           season = season,
           player_id = as.numeric(player_id),
           team_id = as.numeric(team_id$team_id),
-          team = team
+          team = team_label_arg
         ) %>%
-        dplyr::relocate("team_id", .after = player_id) %>%
-        dplyr::relocate("season", .after = team_id)
+        relocate("team_id", .after = player_id) %>%
+        relocate("season", .after = team_id)
     },
     error = function(e) {
-      message(glue::glue(
-        "{Sys.time()}: Invalid season or no roster data available! Try a season from 2023 onwards!"
-      ))
+      message(
+        glue(
+          "{Sys.time()}: Invalid season or no roster data available! Try a season from 2023 onwards!"
+        )
+      )
     },
     warning = function(w) {},
     finally = {}
