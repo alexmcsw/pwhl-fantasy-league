@@ -58,12 +58,21 @@ teams <- team_data_frames["teams"][[1]]
 team_codes <- team_data_frames["team_codes"][[1]]
 all_teams <- team_data_frames["all_teams"][[1]]
 
-schedule <- get_schedule(
+schedules <- get_schedule(
   season_id,
   team_codes,
   team_logo_urls,
-  season_dates_and_type
+  season_dates_and_type,
+  last_game_day_date,
+  next_game_day_date,
+  current_date
 )
+
+schedule <- schedules["schedule"][[1]]
+last_game_day_date <- schedules["last_game_day_date"][[1]]
+next_game_day_date <- schedules["next_game_day_date"][[1]]
+last_game_day <- schedules["last_game_day"][[1]]
+next_game_day <- schedules["next_game_day"][[1]]
 
 schedule_to_date <- schedule |>
 filter(
@@ -115,52 +124,13 @@ standings <- compute_standings(
 )
 
 if (
-    as.character(
-        last_game_day_date
-    ) == "tbd"
+    typeof(last_game_day) != "logical"
 ) {
-    last_game_day_date <- Filter(
-        function(x) ymd(x) < ymd(current_date),
-        schedule$game_date
-    ) |> last()
-}
-
-
-
-if (
-    is.null(
-        last_game_day_date
-    )
-) {
-    last_game_day <- FALSE
-} else {
-    last_game_day <- schedule |>
-    filter(
-        game_date == ymd(
-            last_game_day_date
-        )
-    ) |> mutate(
+    last_game_day <- last_game_day |>
+    mutate(
         roster_points_per_game[game_id,]
     )
 }
-
-if (
-    as.character(
-        next_game_day_date
-    ) == "tbd"
-) {
-    next_game_day_date <- Filter(
-        function(x) ymd(x) >= ymd(current_date),
-        schedule$game_date
-    )[[1]]
-}
-
-next_game_day <- schedule |>
-filter(
-    game_date == ymd(
-        next_game_day_date
-    )
-)
 ```
 
 # Overview
