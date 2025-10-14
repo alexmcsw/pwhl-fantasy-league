@@ -131,9 +131,15 @@ get_schedule <- function(
         )
     )
 
+  schedule_to_date <- schedule |>
+    filter(
+      game_date < ymd(current_date)
+    )
+
   return(
     list(
       schedule = schedule,
+      schedule_to_date = schedule_to_date,
       last_game_day_date = last_game_day_date,
       next_game_day_date = next_game_day_date,
       last_game_day = last_game_day,

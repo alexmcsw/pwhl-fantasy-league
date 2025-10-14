@@ -1,0 +1,65 @@
+#' @title  **Get PWHL Fantasy Teams and Points**
+#' @description Get PWHL Fantasy rosters, points to date and overall standings
+#'
+#' @param all_teams All PWHL player info and stats
+#' @param schedule_to_date Current season schedule up to current_date
+#' @param schedule Entire schedule for current season
+#' @return data.frames of schedule and next/last game days
+#' @export
+
+get_fantasy_teams_and_standings <- function(
+  all_teams,
+  schedule_to_date,
+  schedule
+) {
+  rosters_idx_gsheet <- get_google_sheet(
+    sheet_id = 0
+  )
+
+  team_images <- rosters_idx_gsheet$team_image |>
+    set_names(
+      rosters_idx_gsheet$team_name
+    )
+
+  rosters_idx <- rosters_idx_gsheet |>
+    select(!(team_name:team_image)) |>
+    t() |>
+    data.frame() |>
+    set_names(
+      rosters_idx_gsheet$team_name
+    )
+
+  team_rosters <- rosters_idx |>
+    map(
+      filter_for_roster_idx,
+      all_teams = all_teams
+    )
+
+  player_boxes_per_game <- list()
+
+  for (game_id in schedule_to_date$game_id) {
+    player_boxes_per_game[[game_id]] <- pwhl_player_box(
+      game_id = game_id
+    )
+  }
+
+  roster_points_per_game <- get_roster_points_per_game(
+    team_rosters,
+    player_boxes_per_game,
+    schedule
+  )
+
+  standings <- compute_standings(
+    roster_points_per_game,
+    team_images
+  )
+
+  return(
+    list(
+      team_images = team_images,
+      team_rosters = team_rosters,
+      roster_points_per_game = roster_points_per_game,
+      standings = standings
+    )
+  )
+}

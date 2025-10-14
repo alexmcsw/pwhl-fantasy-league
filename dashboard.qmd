@@ -69,59 +69,24 @@ schedules <- get_schedule(
 )
 
 schedule <- schedules["schedule"][[1]]
+schedule_to_date <- schedules["schedule_to_date"][[1]]
 last_game_day_date <- schedules["last_game_day_date"][[1]]
 next_game_day_date <- schedules["next_game_day_date"][[1]]
 last_game_day <- schedules["last_game_day"][[1]]
 next_game_day <- schedules["next_game_day"][[1]]
-
-schedule_to_date <- schedule |>
-filter(
-    game_date < ymd(current_date)
-)
-
-
-player_boxes_per_game <- list()
-
-for (game_id in schedule_to_date$game_id) {
-    player_boxes_per_game[[game_id]] <- pwhl_player_box(
-        game_id=game_id
-    )
-}
-
-rosters_idx_gsheet <- get_google_sheet(
-    sheet_id = 0
-)
-
-team_images <- rosters_idx_gsheet$team_image |>
-set_names(
-    rosters_idx_gsheet$team_name
-)
 ```
 
-```{r "wringle and wrangle"}
-rosters_idx <- rosters_idx_gsheet |>
-    select(!(team_name:team_image)) |>
-    t() |>
-    data.frame() |>
-    set_names(
-        rosters_idx_gsheet$team_name
-    )
-
-team_rosters <- rosters_idx |> map(
-    filter_for_roster_idx,
-    all_teams = all_teams
+```{r "Get Fantasy teams and standings"}
+fantasy_teams_and_standings <- get_fantasy_teams_and_standings(
+  all_teams,
+  schedule_to_date,
+  schedule
 )
 
-roster_points_per_game <- get_roster_points_per_game(
-    team_rosters,
-    player_boxes_per_game,
-    schedule
-)
-
-standings <- compute_standings(
-    roster_points_per_game,
-    team_images
-)
+team_images <- fantasy_teams_and_standings["team_images"][[1]]
+team_rosters <- fantasy_teams_and_standings["team_rosters"][[1]]
+roster_points_per_game <- fantasy_teams_and_standings["roster_points_per_game"][[1]]
+standings <- fantasy_teams_and_standings["standings"][[1]]
 
 if (
     typeof(last_game_day) != "logical"
