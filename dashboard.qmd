@@ -1,6 +1,6 @@
 ---
 title: "PWHL Fantasy League"
-author: "Noah Bolohan"
+author: "TBD"
 format: dashboard
 ---
 
