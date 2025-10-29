@@ -1,12 +1,15 @@
 ---
 title: "PWHL Fantasy League"
-author: "Noah Bolohan"
+author: "TBD"
 format: dashboard
 ---
 
-```{r}
+```{r imports}
 library(tidyverse)
 library(gt)
+library(bslib)
+library(shiny)
+library(bsicons)
 
 invisible(
     lapply(
@@ -19,231 +22,228 @@ invisible(
 )
 ```
 
-```{r}
-season <- 2025
+```{r "Get season dates and type"}
+current_date = today()
+current_date = "2024-11-22"
 
-current_date <- "2024-12-05"
-season_start <- "2024-11-30"
+season_dates_and_type <- get_season_dates_and_type()
 
-team_logo_urls <- c(
-    "https://upload.wikimedia.org/wikipedia/en/b/bc/BostonFleet.png",
-    "https://upload.wikimedia.org/wikipedia/en/a/ae/MinnesotaFrost.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/9/93/Montreal_Victoire_Logo.svg/800px-Montreal_Victoire_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/New_York_Sirens_Logo.svg/1024px-New_York_Sirens_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Ottawa_Charge_Logo.svg/1280px-Ottawa_Charge_Logo.svg.png",
-    "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Toronto_Sceptres.svg/800px-Toronto_Sceptres.svg.png"
+days_for_current_date <- get_days_for_current_date(
+  current_date,
+  season_dates_and_type
 )
 
-names(team_logo_urls) <- pwhl_teams()$team_label |>
-recode(
-    "Montreal"="Montréal"
-)
-
-all_teams <- team_stats(season)
-
-schedule <- pwhl_schedule(
-    season
-)
-
-schedule$home_team_logo <- team_logo_urls[
-    match(
-        schedule$home_team,
-        names(team_logo_urls)
-    )
-]
-
-schedule$away_team_logo <- team_logo_urls[
-    match(
-        schedule$away_team,
-        names(team_logo_urls)
-    )
-]
-
-schedule$game_date <- schedule$game_date |>
-str_split_i(
-    pattern=",",
-    i=-1
-) |>
-trimws() |>
-map(
-    parse_schedule_year,
-    season_start=season_start
-)
-
-schedule_to_date <- schedule |>
-filter(
-    game_date < ymd(current_date)
-)
-
-
-player_boxes_per_game <- list()
-
-for (game_id in schedule_to_date$game_id) {
-    player_boxes_per_game[[game_id]] <- pwhl_player_box(
-        game_id=game_id
-    )
-}
-
-rosters_idx_gsheet <- get_google_sheet(
-    sheetId = 0
-)
-
-team_images <- rosters_idx_gsheet$team_image |>
-set_names(
-    rosters_idx_gsheet$team_name
-)
+last_game_day_date <- days_for_current_date$last_game_day_date |>
+ as.character()
+next_game_day_date <- days_for_current_date$next_game_day_date |>
+ as.character()
+season_id <- days_for_current_date$season_id |>
+ as.numeric()
+season <- days_for_current_date$season |>
+ as.numeric()
+game_type <- days_for_current_date$game_type |>
+ as.character()
 ```
 
-```{r}
-rosters_idx <- rosters_idx_gsheet |>
-    select(!(team_name:team_image)) |>
-    t() |>
-    data.frame() |>
-    set_names(
-        rosters_idx_gsheet$team_name
-    )
+```{r "Get team and schedule data"}
 
-team_rosters <- rosters_idx |> map(
-    filter_for_roster_idx,
-    all_teams = all_teams
+team_data_frames <- get_all_teams(
+  season_id,
+  season,
+  game_type
 )
 
-roster_points_per_game <- get_roster_points_per_game(
-    team_rosters,
-    player_boxes_per_game
+team_logo_urls <- team_data_frames["team_logo_urls"][[1]]
+teams <- team_data_frames["teams"][[1]]
+team_codes <- team_data_frames["team_codes"][[1]]
+all_teams <- team_data_frames["all_teams"][[1]]
+
+schedules <- get_schedule(
+  season_id,
+  team_codes,
+  team_logo_urls,
+  season_dates_and_type,
+  last_game_day_date,
+  next_game_day_date,
+  current_date
 )
 
-standings <- compute_standings(
-    roster_points_per_game
+schedule <- schedules["schedule"][[1]]
+schedule_to_date <- schedules["schedule_to_date"][[1]]
+last_game_day_date <- schedules["last_game_day_date"][[1]]
+next_game_day_date <- schedules["next_game_day_date"][[1]]
+last_game_day <- schedules["last_game_day"][[1]]
+next_game_day <- schedules["next_game_day"][[1]]
+```
+
+```{r "Get Fantasy teams and standings"}
+fantasy_teams_and_standings <- get_fantasy_teams_and_standings(
+  all_teams,
+  schedule_to_date,
+  schedule
 )
 
-last_game_day_date <- Filter(
-    function(x) ymd(x) < ymd(current_date),
-    schedule$game_date
-) |> last()
+team_images <- fantasy_teams_and_standings["team_images"][[1]]
+team_rosters <- fantasy_teams_and_standings["team_rosters"][[1]]
+roster_points_per_game <- fantasy_teams_and_standings["roster_points_per_game"][[1]]
+standings <- fantasy_teams_and_standings["standings"][[1]]
 
-last_game_day <- schedule |>
-filter(
-    game_date == ymd(
-        last_game_day_date
+if (
+    typeof(last_game_day) != "logical"
+) {
+    last_game_day <- last_game_day |>
+    mutate(
+        roster_points_per_game[game_id,]
     )
-) |> select(
-    c(
-        "game_id",
-        "home_team_logo",
-        "away_team_logo"
-    )
-) |> mutate(
-    roster_points_per_game[game_id,]
-) |> select(
-    c(
-        "home_team_logo",
-        "away_team_logo",
-        names(roster_points_per_game)
-    )
-)
-
-next_game_day_date <- Filter(
-    function(x) ymd(x) >= ymd(current_date),
-    schedule$game_date
-)[[1]]
-
-next_game_day <- schedule |>
-filter(
-    game_date == ymd(
-        next_game_day_date
-    )
-) |> select(
-    c(
-        "home_team_logo",
-        "away_team_logo"
-    )
-)
-
+}
 ```
 
 # Overview
 
-(Fake) Current date: `{r} current_date`
+## Row
+
+```{r "next game day"}
+
+p_args <- next_game_day |>
+mutate(
+    temp = paste0(
+            home_team_code,
+            " @ ",
+            away_team_code,
+            ", ",
+            game_status
+        )
+) |> select(
+    temp
+)
+
+p_args <-map(
+    p_args[,1],
+    p
+)
+
+value_box(
+    title = "Next game day",
+    showcase = bs_icon(
+        "calendar-event",
+        size="6vh"
+    ),
+    value = tags$p(
+        format(
+            next_game_day_date,
+            "%b %e, %Y"
+        ),
+        style = "font-size: 4vh;"
+    ),
+    theme = "success",
+    !!!p_args
+)
+```
 
 ## Row
 
-```{r}
-#| title:  Next game(s)
+```{r "last game day"}
+if (
+    nrow(
+        roster_points_per_game
+    ) == 0
+) {
 
-next_game_day |>
-gt() |>
-tab_header(
-    title = format(
-        next_game_day_date,
-        "Next game day: %B%e, %Y"
+    value_box(
+        title = "No data available",
+        showcase = bs_icon(
+            "hourglass-split",
+            size="6vh"
+        ),
+        value = tags$p(
+            "No games played yet this season",
+            style = "font-size: 4vh;"
+        ),
+        theme = "danger"
     )
-) |>
-text_transform(
-    locations = cells_body(
-        columns = c(
-            "home_team_logo",
-            "away_team_logo"
-        )
-    ),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "5vh"
-        )
-    }
-)
+} else {
+
+    value_box(
+        title = format(
+                last_game_day_date,
+                "Last game day (%B %e, %Y)"
+            ),
+        value = last_game_day |> mutate(
+            temp = "-"
+        ) |> select(
+            c(
+                "home_team_code",
+                "home_team_logo",
+                "home_score",
+                "temp",
+                "away_score",
+                "away_team_logo",
+                "away_team_code"
+            )
+        ) |>
+        gt() |>
+        text_transform(
+            locations = cells_body(
+                columns = c(
+                    "home_team_logo",
+                    "away_team_logo"
+                )
+            ),
+            fn = function(x) {
+                web_image(
+                    url = x,
+                    height = "5vh"
+                )
+            }
+        ) |> cols_label(
+            home_team_code = "",
+            home_team_logo = "Home",
+            home_score = "",
+            temp = "",
+            away_score = "",
+            away_team_logo = "Away",
+            away_team_code = ""
+        ),
+        theme = "success"
+    )
+}
 
 ```
 
 ## Row
 
-```{r}
-#| title:  Last game day summary
-
-last_game_day |>
-gt() |>
-tab_header(
-    title = format(
-        last_game_day_date,
-        "Last game day: %B%e, %Y"
-    )
-) |>
-text_transform(
-    locations = cells_body(
-        columns = c(
-            "home_team_logo",
-            "away_team_logo"
-        )
-    ),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "5vh"
-        )
-    }
-)
-
-```
-
-## Row
-
-```{r}
+```{r "standings overview"}
 #| title: "Standings"
-standings |> mutate(
-    team_image = recode(
-        team_name,
-        !!!team_images
+standings |>
+mutate(
+    delta = roster_points_per_game |>
+    filter(
+        game_date == last_game_day_date
+    ) |>
+    compute_standings(
+        team_images
+    ) |>
+    pull(
+        Points
     )
 ) |>
-select(
-    team_image,
-    points
+mutate(
+    Points = paste0(
+            Points,
+            " (+",
+            delta,
+            ")"
+        )
+) |> select(
+    c(
+        Team,
+        Points
+    )
 ) |>
 gt() |>
 text_transform(
     locations = cells_body(
-        columns = team_image
+        columns = Team
     ),
     fn = function(x) {
         web_image(
@@ -258,23 +258,13 @@ text_transform(
 
 ## Row
 
-```{r}
+```{r "standings full"}
 #| title: "Standings"
-standings |> mutate(
-    team_image = recode(
-        team_name,
-        !!!team_images
-    )
-) |>
-select(
-    team_name,
-    team_image,
-    points
-) |>
+standings |>
 gt() |>
 text_transform(
     locations = cells_body(
-        columns = team_image
+        columns = Team
     ),
     fn = function(x) {
         web_image(
@@ -287,32 +277,53 @@ text_transform(
 
 ## Row
 
-```{r}
+```{r "standings over time"}
 #| title: "Standings over time"
 
-roster_points_per_game |>
-mutate(
-    across(
-        names(team_rosters),
-        ~ .x |> as.numeric() |> cumsum()
-    ),
-    game_idx = 1:nrow(
+if (
+    nrow(
         roster_points_per_game
+    ) == 0
+) {
+
+    value_box(
+        title = "No data available",
+        showcase = bs_icon(
+            "hourglass-split",
+            size="6vh"
+        ),
+        value = tags$p(
+            "No games played yet this season",
+            style = "font-size: 4vh;"
+        ),
+        theme = "danger"
     )
-) |>
-pivot_longer(
-    cols = names(team_rosters),
-    names_to = "team_name",
-    values_to = "cum_score"
-) |>
-ggplot() +
-geom_line(
-    aes(
-        x = game_idx,
-        y = cum_score,
-        colour = team_name
+} else {
+
+    roster_points_per_game |>
+    mutate(
+        across(
+            names(team_rosters),
+            ~ .x |> as.numeric() |> cumsum()
+        ),
+        game_idx = 1:nrow(
+            roster_points_per_game
+        )
+    ) |>
+    pivot_longer(
+        cols = names(team_rosters),
+        names_to = "team_name",
+        values_to = "cum_score"
+    ) |>
+    ggplot() +
+    geom_line(
+        aes(
+            x = game_idx,
+            y = cum_score,
+            colour = team_name
+        )
     )
-)
+}
 ```
 
 # Team Rosters
