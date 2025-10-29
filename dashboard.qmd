@@ -317,56 +317,44 @@ geom_line(
 
 # Team Rosters
 
-## Row {.tabset}
+::: {.panel-tabset}
 
 ```{r}
-#| title: Noah
-team_rosters$Noah |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
+#| output: asis
+res <- purrr::map_chr(
+    unique(names(team_rosters)),
+    function(name) {
+        knitr::knit_child(
+            text = c(
+                "## `r name`",
+                "", 
+                "```{r}",
+                "#| echo: false",
+                "html(",
+                "    web_image(",
+                "        url = team_images[[name]],",
+                "        height = '50px'",
+                "    )",
+                ")",
+                "team_rosters[[name]] |> gt() |> text_transform(",
+                "        locations = cells_body(columns = player_headshot),",
+                "        fn = function(x) {",
+                "            web_image(",
+                "                url = x,",
+                "                height = '50px'",
+                "            )",
+                "        }",
+                "    )",
+                "```",
+                "",
+                ""
+            ),
+            envir = environment(),
+            quiet = TRUE
         )
     }
 )
-```
 
-```{r}
-#| title: Alex
-team_rosters$Alex |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
-)
+cat(res, sep = '\n')
 ```
-
-```{r}
-#| title: Rambouillet
-team_rosters$Rambouillet |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
-)
-```
-
-```{r}
-#| title: Meadow
-team_rosters$Meadow |> gt() |> text_transform(
-    locations = cells_body(columns = player_headshot),
-    fn = function(x) {
-        web_image(
-            url = x,
-            height = "50px"
-        )
-    }
-)
-```
+:::
