@@ -385,13 +385,55 @@ res <- purrr::map_chr(
                 "## `r team_label`",
                 "", 
                 "```{r}",
-                "#| echo: false",
                 "all_teams |>",
                 "    filter(",
                 "        team == team_label",
-                "    ) |> datatable(",
-                "        rownames = FALSE,",
-                "        filter='top'",
+                "    ) |>",
+                "    mutate(",
+                "        position = recode(",
+                "            position,",
+                "            'F' = 'Forwards',",
+                "            'D' = 'Defenders',",
+                "            'G' = 'Goalies'",
+                "        )",
+                "    ) |>",
+                "    select(",
+                "        c(",
+                "            'jersey_number',",
+                "            'player_headshot',",
+                "            'player_name',",
+                "            'position',",
+                "            'primary_hand',",
+                "            'dob',",
+                "            'home_town'",
+                "        )",
+                "    ) |>",
+                "    rename(",
+                "        c(",
+                "            '#' = 'jersey_number',",
+                "            Headshot = 'player_headshot',",
+                "            Name = 'player_name',",
+                "            Pos = 'position',",
+                "            Shoots = 'primary_hand',",
+                "            DOB = 'dob',",
+                "            'Home town' = 'home_town'",
+                "        )",
+                "    ) |>",
+                "    gt(",
+                "        groupname_col = 'Pos'",
+                "    ) |>",
+                "    text_transform(",
+                "        locations = cells_body(",
+                "            columns = 'Headshot'",
+                "        ),",
+                "        fn = function(x) {",
+                "            web_image(",
+                "                url = x,",
+                "                height = '50px'",
+                "            )",
+                "        }",
+                "    ) |> cols_label(",
+                "        Headshot = ''",
                 "    )",
                 "```",
                 "",
@@ -406,47 +448,3 @@ res <- purrr::map_chr(
 cat(res, sep = '\n')
 ```
 :::
-
-# Single PWHL Roster
-
-```{r "singlepwhl roster"}
-#| title: Single PWHL Roster
-all_teams |>
-    filter(
-        team == "Boston"
-    ) |>
-    mutate(
-        position = recode(
-            position,
-            "F" = "Forwards",
-            "D" = "Defenders",
-            "G" = "Goalies"
-        )
-    ) |>
-    select(
-        c(
-            "jersey_number",
-            "player_headshot",
-            "player_name",
-            "position",
-            "primary_hand",
-            "dob",
-            "home_town"
-
-        )
-    ) |>
-    gt(
-        groupname_col = "position"
-    ) |>
-    text_transform(
-        locations = cells_body(
-            columns = "player_headshot"
-        ),
-        fn = function(x) {
-            web_image(
-                url = x,
-                height = '50px'
-            )
-        }
-    )
-```
