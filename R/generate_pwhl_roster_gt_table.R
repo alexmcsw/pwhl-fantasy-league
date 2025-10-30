@@ -21,15 +21,21 @@ generate_pwhl_roster_gt_table <- function(
                 team == team_label
             ) |>
             mutate(
-                position = recode(
+                group = recode(
                     position,
                     "F" = "Forwards",
+                    "C" = "Forwards",
+                    "LW" = "Forwards",
+                    "RW" = "Forwards",
                     "D" = "Defenders",
-                    "G" = "Goalies"
+                    "LD" = "Defenders",
+                    "RD" = "Defenders",
+                    "G" = "Goalies",
                 )
             ) |>
             select(
                 c(
+                    "group",
                     "jersey_number",
                     "player_headshot",
                     "player_name",
@@ -51,12 +57,13 @@ generate_pwhl_roster_gt_table <- function(
                 )
             ) |>
             gt(
-                groupname_col = "Pos"
+                groupname_col = "group"
             ) |>
             fmt_image(
                 columns = "Headshot",
                 width = "50px",
                 height = "50px"
-            )
+            ) |>
+            opt_stylize(style = 1)
     )
 }

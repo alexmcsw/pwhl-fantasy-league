@@ -1,7 +1,9 @@
 ---
 title: "PWHL Fantasy League"
 author: "TBD"
-format: dashboard
+format:
+  dashboard:
+    css: styles.css
 ---
 
 ```{r imports}
@@ -24,7 +26,7 @@ invisible(
 
 ```{r "Get season dates and type"}
 current_date = today()
-current_date = "2024-11-22"
+# current_date = "2024-11-22"
 
 season_dates_and_type <- get_season_dates_and_type()
 
@@ -130,7 +132,10 @@ value_box(
     ),
     value = tags$p(
         format(
-            next_game_day_date,
+            as.Date(
+                next_game_day_date,
+                format="%Y-%m-%d"
+            ),
             "%b %e, %Y"
         ),
         style = "font-size: 4vh;"
@@ -165,7 +170,10 @@ if (
 
     value_box(
         title = format(
-                last_game_day_date,
+                as.Date(
+                    last_game_day_date,
+                    format="%Y-%m-%d"
+                ),
                 "Last game day (%B %e, %Y)"
             ),
         value = last_game_day |> mutate(

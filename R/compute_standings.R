@@ -19,7 +19,7 @@ compute_standings <- function(
   standings <- roster_points_per_game |>
     summarise(
       across(
-        -game_date,
+        -c(game_id, game_date),
         ~ sum(
           .,
           na.rm = TRUE
