@@ -10,7 +10,6 @@ library(gt)
 library(bslib)
 library(shiny)
 library(bsicons)
-library(DT)
 
 invisible(
     lapply(
