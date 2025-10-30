@@ -10,6 +10,7 @@ library(gt)
 library(bslib)
 library(shiny)
 library(bsicons)
+library(DT)
 
 invisible(
     lapply(
@@ -330,7 +331,7 @@ if (
 
 ::: {.panel-tabset}
 
-```{r}
+```{r "team rosters"}
 #| output: asis
 res <- purrr::map_chr(
     unique(names(team_rosters)),
@@ -369,3 +370,83 @@ res <- purrr::map_chr(
 cat(res, sep = '\n')
 ```
 :::
+
+# PWHL Rosters
+
+::: {.panel-tabset}
+
+```{r "pwhl rosters"}
+#| output: asis
+res <- purrr::map_chr(
+    teams$team_label,
+    function(team_label) {
+        knitr::knit_child(
+            text = c(
+                "## `r team_label`",
+                "", 
+                "```{r}",
+                "#| echo: false",
+                "all_teams |>",
+                "    filter(",
+                "        team == team_label",
+                "    ) |> datatable(",
+                "        rownames = FALSE,",
+                "        filter='top'",
+                "    )",
+                "```",
+                "",
+                ""
+            ),
+            envir = environment(),
+            quiet = TRUE
+        )
+    }
+)
+
+cat(res, sep = '\n')
+```
+:::
+
+# Single PWHL Roster
+
+```{r "singlepwhl roster"}
+#| title: Single PWHL Roster
+all_teams |>
+    filter(
+        team == "Boston"
+    ) |>
+    mutate(
+        position = recode(
+            position,
+            "F" = "Forwards",
+            "D" = "Defenders",
+            "G" = "Goalies"
+        )
+    ) |>
+    select(
+        c(
+            "jersey_number",
+            "player_headshot",
+            "player_name",
+            "position",
+            "primary_hand",
+            "dob",
+            "home_town"
+
+        )
+    ) |>
+    gt(
+        groupname_col = "position"
+    ) |>
+    text_transform(
+        locations = cells_body(
+            columns = "player_headshot"
+        ),
+        fn = function(x) {
+            web_image(
+                url = x,
+                height = '50px'
+            )
+        }
+    )
+```
