@@ -237,6 +237,7 @@ mutate(
         )
 ) |> select(
     c(
+        Name,
         Team,
         Points
     )
