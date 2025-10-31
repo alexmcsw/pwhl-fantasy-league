@@ -26,23 +26,26 @@ get_roster_points_per_game <- function(
     ) ==
       0
   ) {
-    return(
-      roster_points_per_game <- data.frame(
-        matrix(
-          ncol = length(
-            team_rosters
-          ) +
-            1,
-          nrow = 0,
-          dimnames = list(
-            NULL,
-            NULL,
-            names(
-              team_rosters
-            )
-          )
-        )
+    column_names <- c(
+      "game_date",
+      names(
+        team_rosters
       )
+    )
+
+    roster_points_per_game <- data.frame(
+      matrix(
+        ncol = length(
+          column_names
+        ),
+        nrow = 0
+      )
+    )
+
+    colnames(roster_points_per_game) <- column_names
+
+    return(
+      roster_points_per_game
     )
   } else {
     return(

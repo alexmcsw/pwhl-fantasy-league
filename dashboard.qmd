@@ -1,7 +1,9 @@
 ---
 title: "PWHL Fantasy League"
 author: "TBD"
-format: dashboard
+format:
+  dashboard:
+    css: styles.css
 ---
 
 ```{r imports}
@@ -24,7 +26,7 @@ invisible(
 
 ```{r "Get season dates and type"}
 current_date = today()
-current_date = "2024-11-22"
+# current_date = "2024-11-22"
 
 season_dates_and_type <- get_season_dates_and_type()
 
@@ -130,7 +132,10 @@ value_box(
     ),
     value = tags$p(
         format(
-            next_game_day_date,
+            as.Date(
+                next_game_day_date,
+                format="%Y-%m-%d"
+            ),
             "%b %e, %Y"
         ),
         style = "font-size: 4vh;"
@@ -329,7 +334,7 @@ if (
 
 ::: {.panel-tabset}
 
-```{r}
+```{r "team rosters"}
 #| output: asis
 res <- purrr::map_chr(
     unique(names(team_rosters)),
@@ -346,8 +351,32 @@ res <- purrr::map_chr(
                 "        height = '50px'",
                 "    )",
                 ")",
-                "team_rosters[[name]] |> gt() |> text_transform(",
-                "        locations = cells_body(columns = player_headshot),",
+                "team_rosters[[name]] |>",
+                "    select(",
+                "        c(",
+                "            'jersey_number',",
+                "            'player_headshot',",
+                "            'player_name',",
+                "            'position',",
+                "            'primary_hand',",
+                "            'dob',",
+                "            'home_town'",
+                "        )",
+                "    ) |>",
+                "    rename(",
+                "        c(",
+                "            '#' = 'jersey_number',",
+                "            Headshot = 'player_headshot',",
+                "            Name = 'player_name',",
+                "            Pos = 'position',",
+                "            Shoots = 'primary_hand',",
+                "            DOB = 'dob',",
+                "            'Home town' = 'home_town'",
+                "        )",
+                "    ) |>",
+                "   gt() |>",
+                "   text_transform(",
+                "        locations = cells_body(columns = Headshot),",
                 "        fn = function(x) {",
                 "            web_image(",
                 "                url = x,",
@@ -368,3 +397,56 @@ res <- purrr::map_chr(
 cat(res, sep = '\n')
 ```
 :::
+
+# PWHL Rosters
+
+## Row {.tabset .landscape}
+
+```{r "Boston roster"}
+#| title: Boston
+generate_pwhl_roster_gt_table(
+    all_teams,
+    "Boston"
+)
+```
+
+```{r "Minnesota roster"}
+#| title: Minnesota
+generate_pwhl_roster_gt_table(
+    all_teams,
+    "Minnesota"
+)
+```
+
+```{r "Montreal roster"}
+#| title: Montreal
+generate_pwhl_roster_gt_table(
+    all_teams,
+    "Montreal"
+)
+```
+
+```{r "New York roster"}
+#| title: New York
+generate_pwhl_roster_gt_table(
+    all_teams,
+    "New York"
+)
+```
+
+```{r "Ottawa roster"}
+#| title: Ottawa
+generate_pwhl_roster_gt_table(
+    all_teams,
+    "Ottawa"
+)
+```
+
+```{r "Toronto roster"}
+#| title: Toronto
+generate_pwhl_roster_gt_table(
+    all_teams,
+    "Toronto"
+)
+```
+

@@ -129,6 +129,15 @@ pwhl_team_roster <- function(
                     NA
                   }
                 ),
+                "jersey_number" = c(
+                  if (
+                    "tp_jersey_number" %in% names(players[[i]]$data[[p]]$row)
+                  ) {
+                    players[[i]]$data[[p]]$row$tp_jersey_number
+                  } else {
+                    NA
+                  }
+                ),
                 "primary_hand" = c(hand),
                 "dob" = c(
                   if ("birthdate" %in% names(players[[i]]$data[[p]]$row)) {
