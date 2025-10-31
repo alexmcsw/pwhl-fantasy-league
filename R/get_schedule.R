@@ -74,7 +74,7 @@ get_schedule <- function(
       i = -1
     ) |>
     trimws() |>
-    map(
+    map_dbl(
       parse_schedule_year,
       season_start = season_dates_and_type[
         season_id,

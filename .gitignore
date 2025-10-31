@@ -52,3 +52,5 @@ rsconnect/
 **/*.quarto_ipynb
 
 /_site/
+
+*.png

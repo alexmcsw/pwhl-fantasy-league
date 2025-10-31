@@ -70,7 +70,11 @@ schedules <- get_schedule(
   current_date
 )
 
-schedule <- schedules["schedule"][[1]]
+schedule <- schedules["schedule"][[1]] |>
+    mutate(
+        game_date = game_date |> as.Date()
+    )
+
 schedule_to_date <- schedules["schedule_to_date"][[1]]
 last_game_day_date <- schedules["last_game_day_date"][[1]]
 next_game_day_date <- schedules["next_game_day_date"][[1]]
@@ -398,6 +402,51 @@ res <- purrr::map_chr(
 cat(res, sep = '\n')
 ```
 :::
+
+# Schedule
+
+```{r "Schedule"}
+
+schedule |>
+    select(
+        c(
+            game_date,
+            game_status,
+            away_team,
+            away_score,
+            home_team,
+            home_score,
+            venue
+        )
+    ) |>
+    mutate(
+        game_date = as.Date(
+                game_date,
+                format="%Y-%m-%d"
+            ) |>
+            format(
+                "%a, %b %e"
+            )
+    ) |>
+    gt() |>
+    cols_align(
+        align = "center",
+        columns = c(
+            "game_status",
+            "away_score",
+            "home_score"
+        )
+    ) |>
+    cols_label(
+        game_date = "Date",
+        game_status = "Time",
+        away_team = "Visiting Team",
+        away_score = "Score",
+        home_team = "Home Team",
+        home_score = "Score",
+        venue = "Venue"
+    )
+```
 
 # PWHL Rosters
 
